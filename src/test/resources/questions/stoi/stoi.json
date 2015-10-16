@@ -1,0 +1,60 @@
+{
+  "id": "stoi",
+  "title": {
+    "de": "",
+    "en": "String to Integer (atoi)",
+    "es": "",
+    "fr": "",
+    "ja": "",
+    "pt-BR": "",
+    "ru": "",
+    "zh-CN": ""
+  },
+  "description": {
+    "en": "Implement `std::stoi()` to convert a string to an integer.\n\n**Hint**: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.\n\n**Notes**: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front."
+  },
+  "category": "algorithm",
+  "tags": [
+    "String"
+  ],
+  "level": 2,
+  "score": 21,
+  "time_limit": 10,
+  "memory_limit": 32,
+  "related_problems": [
+    "str-str"
+  ],
+  "function": {
+    "name": "myStoi",
+    "return": {
+      "type": "int",
+      "comment": "An integer"
+    },
+    "parameters": [
+      {
+        "name": "str",
+        "type": "string",
+        "comment": "A string"
+      }
+    ]
+  },
+  "author": {
+    "name": "soulmachine",
+    "email": "soulmachine@gmail.com",
+    "website": "http://www.soulmachine.me",
+    "github": "https://github.com/soulmachine",
+    "facebook": "https://www.facebook.com/soulmachine",
+    "linkedin": "http://www.linkedin.com/in/soulmachine",
+    "twitter": "https://twitter.com/soulmachine"
+  },
+  "test_cases": [
+    {"input": [""], "output": 0},
+    {"input": ["1"], "output": 1},
+    {"input": ["+1"], "output": 1},
+    {"input": ["-1"], "output": -1},
+    {"input": ["123"], "output": 123},
+    {"input": ["-123"], "output": -123},
+    {"input": ["+-2"], "output": 0},
+    {"input": ["010"], "output": 10}
+  ]
+}
