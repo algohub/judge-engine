@@ -10,7 +10,7 @@ A modern versatile online judge engine, which supports most of programming langu
 
 ### 3. Python 3
 
-### 4. Ruby 2
+### 4. Ruby 2
 
 These commands should be available in `$PAHT`: `java`, `javac`, `g++`, `python3`, `ruby`
 
