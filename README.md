@@ -1,39 +1,62 @@
 # Algohub Judge Engine
 
-A modern versatile online judge engine, which supports most of programming languages.
+Algohub Judge Engine is a modern online judge engine, which supports most of programming languages.
+
+Supported OS: Ubuntu 16.04, CentOS 6.7
+
 
 ## Prerequisites
 
-### 1. JDK 8
 
-### 2. GCC 4.9+
+### Compilers and Interpreters
 
-### 3. Python 3
+The judge engine uses compilers and interpreters under the hood, so you need to install compilers and interpreters in advance.
 
-### 4. Ruby 2
+Currently Algohub Judge Engine uses JDK 8, GCC 5, Python3 and Ruby 2.
 
-These commands should be available in `$PAHT`: `java`, `javac`, `g++`, `python3`, `ruby`
+The following commands should be available in `$PATH`:
 
-## Compile on Ubuntu
+* `java`
+* `javac`
+* `g++`*
+* `python3`
+* `ruby`
 
-### 1. Install libraries
 
-1. Copy rapidjson headers to `/usr/local/include`
+### Libraries and Pre-defined Modules
 
-        git clone git@github.com:miloyip/rapidjson.git
-        sudo cp -r rapidjson/include/rapidjson/ /usr/local/include/
 
-2. Copy the Python `algohub` module  into one of Python's default module paths, i.e., `sys.path`
+#### rapidjson
 
-        sudo cp -r src/main/resources/python/algohub/  /usr/lib/python3.4
+Algohub Judge Engine relies on the [rapidjson](ihttps://github.com/miloyip/rapidjson) library to support C++ language. So we need to make the rapidjson system wide.
 
-3. Copy the Ruby  `algohub`module into one of Ruby's default module search path(run `ruby -e 'puts $:'` to get all paths)
+    git clone git@github.com:miloyip/rapidjson.git
+    sudo cp -r rapidjson/include/rapidjson/ /usr/local/include/
 
-        cp  src/main/resources/ruby/algohub.rb ~/.rvm/rubies/ruby-2.2.2/lib/ruby/2.2.0
 
-### 2. Compile
+#### Pre-defined Python Module
+
+The judge engine has a pre-defined python module named `algohub`, which is need during runtime.
+
+Copy the Python `algohub` module  into one of Python's default module paths, i.e., `sys.path`
+
+    python3 -c "import sys;print(sys.path);"
+    sudo cp -r src/main/resources/python/algohub/  /usr/local/lib/python3.5/dist-packages/
+
+
+#### Pre-defined Ruby module
+
+The judge engine also has a pre-defined ruby module named `algohub`, which is need during runtime.
+
+Copy the Ruby  `algohub` module into one of Ruby's default module search path(run `ruby -e 'puts $:'` to get all paths)
+
+    cp  src/main/resources/ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
+
+
+## Compile
 
     mvn clean package
+
 
 ## Run
 
