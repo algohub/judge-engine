@@ -9,7 +9,8 @@ import org.algohub.engine.serde.Deserializer;
  * Internal test case, deserialized.
  */
 @SuppressWarnings({"PMD.CommentRequired", "PMD.UnusedPrivateField",
-    "PMD.BeanMembersShouldSerialize", "PMD.SingularField"}) public class InternalTestCase {
+    "PMD.BeanMembersShouldSerialize", "PMD.SingularField"})
+public class InternalTestCase {
   private final Object[] input;
   private final Object output;
 

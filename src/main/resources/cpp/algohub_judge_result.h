@@ -7,13 +7,13 @@
 
 
 enum class StatusCode {
-    ACCEPTED = 2,
-    WRONG_ANSWER = 3,
-    RUNTIME_ERROR = 5,
-    TIME_LIMIT_EXCEEDED = 6,
-    MEMORY_LIMIT_EXCEEDED = 7,
-    OUTPUT_LIMIT_EXCEEDED = 8,
-    RESTRICTED_CALL = 9,
+    ACCEPTED = 4,
+    WRONG_ANSWER = 5,
+    RUNTIME_ERROR = 6,
+    TIME_LIMIT_EXCEEDED = 7,
+    MEMORY_LIMIT_EXCEEDED = 8,
+    OUTPUT_LIMIT_EXCEEDED = 9,
+    RESTRICTED_CALL = 10,
 };
 
 static inline int status_code_to_int(StatusCode code) {

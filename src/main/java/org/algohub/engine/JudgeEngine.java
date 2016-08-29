@@ -83,7 +83,7 @@ public class JudgeEngine {
    * otherwise, JudgeResult.succeed will be false and contain both output results.
    */
   private JudgeResult judge(final Function function, final Question.TestCase[] testCases,
-      final String userCode, final LanguageType languageType) throws InterruptedException {
+      final String userCode, final LanguageType languageType) {
     switch (languageType) {
       case JAVA:
         return javaJudge.judge(function, testCases, userCode);
@@ -112,8 +112,7 @@ public class JudgeEngine {
    * otherwise, JudgeResult.succeed will be false and contain both output results.
    */
   @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops"}) public JudgeResult judge(
-      final Question question, final String userCode, final LanguageType languageType)
-      throws InterruptedException {
+      final Question question, final String userCode, final LanguageType languageType) {
     final Question.TestCase[] testCases = question.getTestCases();
     return judge(question.getFunction(), testCases, userCode, languageType);
 

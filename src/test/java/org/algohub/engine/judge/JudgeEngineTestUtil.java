@@ -1,9 +1,6 @@
 package org.algohub.engine.judge;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 
 import org.algohub.engine.JudgeEngine;
 import org.algohub.engine.pojo.JudgeResult;
@@ -13,14 +10,15 @@ import org.algohub.engine.util.ObjectMapperInstance;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public final class JudgeEngineTestUtil {
+final class JudgeEngineTestUtil {
   private static final JudgeEngine JUDGE_ENGINE = new JudgeEngine();
 
   private static final ImmutableMap<LanguageType, String> LANGUAGE_TO_EXTENSION =
@@ -28,39 +26,38 @@ public final class JudgeEngineTestUtil {
           .put(LanguageType.JAVASCRIPT, ".js").put(LanguageType.CPLUSPLUS, ".cpp")
           .put(LanguageType.PYTHON, ".py").put(LanguageType.RUBY, ".rb").build();
 
-  public static void batchJudge(final LanguageType languageType) {
-    File rootDir = new File("src/test/resources/questions/");
-    Pattern pattern = Pattern.compile("\\w+\\" + LANGUAGE_TO_EXTENSION.get(languageType));
+  static void batchJudge(final LanguageType languageType) {
+    final File rootDir = new File("src/test/resources/solutions/");
+    final File questionDir = new File("src/test/resources/questions/");
+    final Pattern pattern = Pattern.compile("\\w+\\" + LANGUAGE_TO_EXTENSION.get(languageType));
 
-    for (final File file : Files.fileTreeTraverser().preOrderTraversal(rootDir)) {
+    try {
+      for (final File solutionDir : rootDir.listFiles()) {
+        final String questionJson = new String(java.nio.file.Files.readAllBytes(
+            Paths.get(questionDir.getAbsolutePath(), solutionDir.getName() + ".json")),
+            StandardCharsets.UTF_8);
+        final Question question = ObjectMapperInstance.INSTANCE.readValue(questionJson,
+            Question.class);
 
-      final Path relativePath = rootDir.toPath().relativize(file.toPath());
-      final String fileName = relativePath.getFileName().toString();
-      final Matcher matcher = pattern.matcher(fileName);
-      if (matcher.matches() && relativePath.getParent().endsWith("solutions")) {
-        final String solutionPath = "questions/" + relativePath.toString();
-        final String questionId = relativePath.getParent().getParent().toString();
-        final String questionPath = "questions/" + questionId + "/" + questionId + ".json";
+        for (final File solutionFile : solutionDir.listFiles()) {
+          final Matcher matcher = pattern.matcher(solutionFile.getName());
+          if (!matcher.matches()) continue;
 
-        judgeOne(questionPath, solutionPath, languageType);
+          final String userCode =
+              new String(java.nio.file.Files.readAllBytes(solutionFile.toPath()),
+                  StandardCharsets.UTF_8);
+
+          judgeOne(question, userCode, languageType);
+        }
       }
+    } catch (IOException ex) {
+      fail(ex.getMessage());
     }
   }
 
-  private static void judgeOne(final String questionPath, final String solutionPath,
+  private static void judgeOne(final Question question, final String userCode,
       LanguageType languageType) {
-    try {
-      final String questionStr =
-          Resources.toString(Resources.getResource(questionPath), Charsets.UTF_8);
-      final Question question =
-          ObjectMapperInstance.INSTANCE.readValue(questionStr, Question.class);
-      final String pythonCode =
-          Resources.toString(Resources.getResource(solutionPath), Charsets.UTF_8);
-
-      final JudgeResult result = JUDGE_ENGINE.judge(question, pythonCode, languageType);
-      assertEquals(StatusCode.ACCEPTED.toInt(), result.getStatusCode());
-    } catch (InterruptedException | IOException e) {
-      fail(e.getMessage());
-    }
+    final JudgeResult result = JUDGE_ENGINE.judge(question, userCode, languageType);
+    assertEquals(StatusCode.ACCEPTED.toInt(), result.getStatusCode());
   }
 }

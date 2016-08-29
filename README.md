@@ -34,6 +34,13 @@ Algohub Judge Engine relies on the [rapidjson](ihttps://github.com/miloyip/rapid
     sudo cp -r rapidjson/include/rapidjson/ /usr/local/include/
 
 
+#### Pre-defined C++ Header Files
+
+Algohub Judge Engine has some pre-defined C++ header files which are needed during compilation.
+
+    sudo cp src/main/resources/cpp/* /usr/local/include/
+
+
 #### Pre-defined Python Module
 
 The judge engine has a pre-defined python module named `algohub`, which is need during runtime.
@@ -50,7 +57,7 @@ The judge engine also has a pre-defined ruby module named `algohub`, which is ne
 
 Copy the Ruby  `algohub` module into one of Ruby's default module search path(run `ruby -e 'puts $:'` to get all paths)
 
-    cp  src/main/resources/ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
+    sudo cp src/main/resources/ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
 
 
 ## Compile

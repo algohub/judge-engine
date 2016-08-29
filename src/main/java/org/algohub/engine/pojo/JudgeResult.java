@@ -49,13 +49,11 @@ public final class JudgeResult {
   public JudgeResult(final String compileErrorMsg) {
     this.statusCode = StatusCode.COMPILE_ERROR.toInt();
     this.errorMessage = compileErrorMsg;
-    this.input = null;
-    this.output = null;
-    this.expectedOutput = null;
-    this.testcasePassedCount = 0;
-    this.testcaseTotalCount = 0;
-    this.elapsedTime = 0;
-    this.consumedMemory = 0;
+  }
+
+  // PENDING or RUNNING
+  public JudgeResult(final StatusCode statusCode) {
+    this.statusCode = statusCode.toInt();
   }
 
   public int getStatusCode() {
