@@ -5,7 +5,22 @@ Algohub Judge Engine is a modern online judge engine, which supports most of pro
 Supported OS: Ubuntu 16.04, CentOS 6.7
 
 
-## Prerequisites
+## Install Dependencies
+
+    ./install.sh
+
+
+## Compile
+
+    mvn clean package
+
+
+## Run
+
+    java -jar target/judge-engine-1.0-SNAPSHOT.jar src/test/resources/problems/2-sum/2-sum.json PYTHON src/test/resources/problems/2-sum/solution.py
+
+
+## Install Dependencies Manually(for advanced users)
 
 
 ### Compilers and Interpreters
@@ -60,12 +75,4 @@ Copy the Ruby  `algohub` module into one of Ruby's default module search path(ru
     sudo cp src/main/resources/ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
 
 
-## Compile
-
-    mvn clean package
-
-
-## Run
-
-    java -jar target/judge-engine-1.0-SNAPSHOT.jar src/test/resources/problems/2-sum/2-sum.json PYTHON src/test/resources/problems/2-sum/solution.py
 
