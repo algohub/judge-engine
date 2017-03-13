@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 
 import org.algohub.engine.JudgeEngine;
 import org.algohub.engine.pojo.JudgeResult;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.type.LanguageType;
 import org.algohub.engine.util.ObjectMapperInstance;
 
@@ -28,16 +28,16 @@ final class JudgeEngineTestUtil {
 
   static void batchJudge(final LanguageType languageType) {
     final File rootDir = new File("src/test/resources/solutions/");
-    final File questionDir = new File("src/test/resources/questions/");
+    final File problemDir = new File("src/test/resources/problems/");
     final Pattern pattern = Pattern.compile("\\w+\\" + LANGUAGE_TO_EXTENSION.get(languageType));
 
     try {
       for (final File solutionDir : rootDir.listFiles()) {
-        final String questionJson = new String(java.nio.file.Files.readAllBytes(
-            Paths.get(questionDir.getAbsolutePath(), solutionDir.getName() + ".json")),
+        final String problemJson = new String(java.nio.file.Files.readAllBytes(
+            Paths.get(problemDir.getAbsolutePath(), solutionDir.getName() + ".json")),
             StandardCharsets.UTF_8);
-        final Question question = ObjectMapperInstance.INSTANCE.readValue(questionJson,
-            Question.class);
+        final Problem problem = ObjectMapperInstance.INSTANCE.readValue(problemJson,
+            Problem.class);
 
         for (final File solutionFile : solutionDir.listFiles()) {
           final Matcher matcher = pattern.matcher(solutionFile.getName());
@@ -47,7 +47,7 @@ final class JudgeEngineTestUtil {
               new String(java.nio.file.Files.readAllBytes(solutionFile.toPath()),
                   StandardCharsets.UTF_8);
 
-          judgeOne(question, userCode, languageType);
+          judgeOne(problem, userCode, languageType);
         }
       }
     } catch (IOException ex) {
@@ -55,9 +55,9 @@ final class JudgeEngineTestUtil {
     }
   }
 
-  private static void judgeOne(final Question question, final String userCode,
+  private static void judgeOne(final Problem problem, final String userCode,
       LanguageType languageType) {
-    final JudgeResult result = JUDGE_ENGINE.judge(question, userCode, languageType);
+    final JudgeResult result = JUDGE_ENGINE.judge(problem, userCode, languageType);
     assertEquals(StatusCode.ACCEPTED.toInt(), result.getStatusCode());
   }
 }

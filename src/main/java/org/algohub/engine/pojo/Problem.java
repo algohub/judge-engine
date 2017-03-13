@@ -11,11 +11,11 @@ import java.util.Map;
 
 
 /**
- * Question Java Object, corresponds to the problem JSON string.
+ * Problem Java Object, corresponds to the problem JSON string.
  */
 @SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.UnusedPrivateField", "PMD.SingularField",
     "PMD.ArrayIsStoredDirectly", "PMD.CommentRequired"}) @JsonIgnoreProperties(ignoreUnknown = true)
-public class Question {
+public class Problem {
   @SuppressWarnings("PMD.ShortVariable") private final String id;
   private final Map<String, String> title;
   private final Map<String, String> description;
@@ -34,7 +34,7 @@ public class Question {
    * Since this class is immutable, need to provide a method for Jackson.
    */
   @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ShortVariable"}) @JsonCreator
-  public Question(@JsonProperty("id") final String id,
+  public Problem(@JsonProperty("id") final String id,
       @JsonProperty("title") final Map<String, String> title,
       @JsonProperty("description") final Map<String, String> description,
       @JsonProperty("category") final String category,

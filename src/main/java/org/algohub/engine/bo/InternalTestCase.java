@@ -1,7 +1,7 @@
 package org.algohub.engine.bo;
 
 import org.algohub.engine.pojo.Function;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.serde.Deserializer;
 
 
@@ -23,7 +23,7 @@ public class InternalTestCase {
   /**
    * Constructor.
    */
-  public InternalTestCase(final Question.TestCase testCase, final Function function) {
+  public InternalTestCase(final Problem.TestCase testCase, final Function function) {
     final Function.Parameter[] parameters = function.getParameters();
     assert (parameters.length == testCase.getInput().size());
 

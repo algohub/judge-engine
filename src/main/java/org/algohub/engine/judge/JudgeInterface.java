@@ -2,7 +2,7 @@ package org.algohub.engine.judge;
 
 import org.algohub.engine.bo.ProcessResult;
 import org.algohub.engine.pojo.JudgeResult;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.pojo.Function;
 
 import java.io.BufferedReader;
@@ -117,6 +117,6 @@ public interface JudgeInterface {
    * @return If the output is identical with the test case, JudgeResult.succeed will be true,
    * otherwise, JudgeResult.succeed will be false and contain both output results.
    */
-  JudgeResult judge(final Function function, final Question.TestCase[] testCases,
+  JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
       final String userCode) throws IOException, InterruptedException;
 }

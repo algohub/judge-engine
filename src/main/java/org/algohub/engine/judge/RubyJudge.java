@@ -7,7 +7,7 @@ import org.algohub.engine.bo.ProcessResult;
 import org.algohub.engine.codegenerator.RubyCodeGenerator;
 import org.algohub.engine.pojo.Function;
 import org.algohub.engine.pojo.JudgeResult;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.util.ObjectMapperInstance;
 
 import java.io.File;
@@ -21,7 +21,7 @@ public class RubyJudge implements JudgeInterface {
   /**
    * @{inhericDoc}.
    */
-  public JudgeResult judge(final Function function, final Question.TestCase[] testCases,
+  public JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
       final String userCode) {
     try {
       final File tmpDir = Files.createTempDir();

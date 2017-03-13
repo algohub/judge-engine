@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.algohub.engine.judge.CppJudge;
 import org.algohub.engine.judge.StatusCode;
 import org.algohub.engine.pojo.Function;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.type.LanguageType;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.type.TypeNode;
@@ -23,10 +23,10 @@ public class CppCodeGeneratorTest {
 
   private static void testSerde(final String typeStr, final String oneTestCase) {
     final TypeNode type = TypeNode.fromString(typeStr);
-    final Question.TestCase[] testCases = new Question.TestCase[1];
+    final Problem.TestCase[] testCases = new Problem.TestCase[1];
     try {
       testCases[0] = OBJECT_MAPPER.readValue("{\"input\":[" + oneTestCase + "],\"output\":" +
-          oneTestCase + "}", Question.TestCase.class);
+          oneTestCase + "}", Problem.TestCase.class);
     } catch (IOException e) {
       fail(e.getMessage());
     }

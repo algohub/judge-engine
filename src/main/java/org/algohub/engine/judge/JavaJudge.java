@@ -4,7 +4,7 @@ import org.algohub.engine.bo.InternalTestCase;
 import org.algohub.engine.compiler.java.CompileErrorException;
 import org.algohub.engine.compiler.java.MemoryJavaCompiler;
 import org.algohub.engine.pojo.JudgeResult;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.serde.Serializer;
 import org.algohub.engine.type.TypeNode;
 import org.algohub.engine.util.Equals;
@@ -32,7 +32,7 @@ public class JavaJudge implements JudgeInterface {
   private static final int IMPORTS_LINES = 4;
 
   private static JudgeResult judge(final Object clazz, final Method method,
-      final InternalTestCase[] testCases, final Question.TestCase[] testCasesJson,
+      final InternalTestCase[] testCases, final Problem.TestCase[] testCasesJson,
       final TypeNode returnType) {
     final long start = System.currentTimeMillis();
     for (int i = 0; i < testCases.length; ++i) {
@@ -80,7 +80,7 @@ public class JavaJudge implements JudgeInterface {
   /**
    * {@inheritDoc}.
    */
-  public JudgeResult judge(final Function function, final Question.TestCase[] testCases,
+  public JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
       final String userCode) {
     final InternalTestCase[] internalTestCases = new InternalTestCase[testCases.length];
     for (int i = 0; i < testCases.length; ++i) {
@@ -99,7 +99,7 @@ public class JavaJudge implements JudgeInterface {
    * @return JudgeResult
    */
   public JudgeResult judge(final Function function, final InternalTestCase[] testCases,
-      final String userCode, final Question.TestCase[] testCasesJson) {
+      final String userCode, final Problem.TestCase[] testCasesJson) {
     final Object clazz;
     final Method method;
     try {

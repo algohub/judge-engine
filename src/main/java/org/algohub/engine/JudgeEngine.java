@@ -5,7 +5,7 @@ import com.google.common.io.Files;
 
 import org.algohub.engine.judge.CppJudge;
 import org.algohub.engine.judge.RubyJudge;
-import org.algohub.engine.pojo.Question;
+import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.judge.CsharpJudge;
 import org.algohub.engine.judge.JavaJudge;
 import org.algohub.engine.judge.JavaScriptJudge;
@@ -58,12 +58,12 @@ public class JudgeEngine {
     }
 
     final String problemStr = Files.asCharSource(new File(args[0]), Charsets.UTF_8).read();
-    final Question question = ObjectMapperInstance.INSTANCE.readValue(problemStr, Question.class);
+    final Problem problem = ObjectMapperInstance.INSTANCE.readValue(problemStr, Problem.class);
     final LanguageType languageType = LanguageType.valueOf(args[1]);
     final String userCode = Files.asCharSource(new File(args[2]), Charsets.UTF_8).read();
 
     final JudgeEngine judgeEngine = new JudgeEngine();
-    final JudgeResult result = judgeEngine.judge(question, userCode, languageType);
+    final JudgeResult result = judgeEngine.judge(problem, userCode, languageType);
 
     if (result.getStatusCode() == StatusCode.ACCEPTED.toInt()) {
       System.out.println("Accepted!");
@@ -82,7 +82,7 @@ public class JudgeEngine {
    * @return If the output is identical with the test case, JudgeResult.succeed will be true,
    * otherwise, JudgeResult.succeed will be false and contain both output results.
    */
-  private JudgeResult judge(final Function function, final Question.TestCase[] testCases,
+  private JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
       final String userCode, final LanguageType languageType) {
     switch (languageType) {
       case JAVA:
@@ -105,16 +105,16 @@ public class JudgeEngine {
   /**
    * Judge the code written by a user.
    *
-   * @param question     the question description and test cases
+   * @param problem     the problem description and test cases
    * @param userCode     the function written by user.
    * @param languageType the programming language
    * @return If the output is identical with the test case, JudgeResult.succeed will be true,
    * otherwise, JudgeResult.succeed will be false and contain both output results.
    */
   @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops"}) public JudgeResult judge(
-      final Question question, final String userCode, final LanguageType languageType) {
-    final Question.TestCase[] testCases = question.getTestCases();
-    return judge(question.getFunction(), testCases, userCode, languageType);
+      final Problem problem, final String userCode, final LanguageType languageType) {
+    final Problem.TestCase[] testCases = problem.getTestCases();
+    return judge(problem.getFunction(), testCases, userCode, languageType);
 
   }
 }
