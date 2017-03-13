@@ -18,8 +18,7 @@
     "Array",
     "Hash Table"
   ],
-  "level": 2,
-  "score": 21,
+  "difficulty": 2,
   "time_limit": 10,
   "memory_limit": 32,
   "related_problems": [

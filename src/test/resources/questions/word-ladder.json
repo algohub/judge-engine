@@ -17,8 +17,7 @@
   "tags": [
     "BFS"
   ],
-  "level": 4,
-  "score": 82,
+  "difficulty": 4,
   "time_limit": 10,
   "memory_limit": 32,
   "related_problems": [
