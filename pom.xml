@@ -13,20 +13,19 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <guava.version>18.0</guava.version>
-        <jackson.version>2.6.2</jackson.version>
-        <maven.compiler.plugin.version>3.2</maven.compiler.plugin.version>
+        <guava.version>21.0</guava.version>
+        <jackson.version>2.9.0.pr1</jackson.version>
+        <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
         <jdk.version>1.8</jdk.version>
         <junit.version>4.12</junit.version>
-        <maven.assembly.plugin.version>2.5.2</maven.assembly.plugin.version>
-        <maven.jar.plugin.version>2.5</maven.jar.plugin.version>
-        <maven.source.plugin.version>2.4</maven.source.plugin.version>
-        <maven.eclipse.plugin.version>2.9</maven.eclipse.plugin.version>
-        <maven.checkstyle.plugin.version>2.16</maven.checkstyle.plugin.version>
-        <checkstyle.version>6.1.1</checkstyle.version>
+        <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
+        <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
+        <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
+        <maven.checkstyle.plugin.version>2.17</maven.checkstyle.plugin.version>
+        <checkstyle.version>7.6</checkstyle.version>
         <maven.jxr.plugin.version>2.5</maven.jxr.plugin.version>
-        <maven.pmd.plugin.version>3.3</maven.pmd.plugin.version>
-        <maven.findbugs.plugin.version>3.0.0</maven.findbugs.plugin.version>
+        <maven.pmd.plugin.version>3.7</maven.pmd.plugin.version>
+        <maven.findbugs.plugin.version>3.0.4</maven.findbugs.plugin.version>
     </properties>
     <dependencies>
         <dependency>
