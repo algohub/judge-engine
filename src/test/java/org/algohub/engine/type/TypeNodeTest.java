@@ -1,5 +1,7 @@
 package org.algohub.engine.type;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.algohub.engine.util.ObjectMapperInstance;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,12 +31,14 @@ public class TypeNodeTest {
     assertFalse(node1.getElementType().isPresent());
     assertFalse(node1.getKeyType().isPresent());
     assertFalse(node1.getParent().isPresent());
+    assertEquals("int", node1.toString());
 
     final TypeNode node2 = TypeNode.fromString("list<int>");
     assertEquals(IntermediateType.LIST, node2.getValue());
     assertTrue(node2.getElementType().isPresent());
     assertFalse(node2.getKeyType().isPresent());
     assertFalse(node2.getParent().isPresent());
+    assertEquals("list<int>", node2.toString());
 
     final TypeNode node2Child = node2.getElementType().get();
     assertEquals(IntermediateType.INT, node2Child.getValue());
@@ -43,7 +47,7 @@ public class TypeNodeTest {
     assertTrue(node2Child.getParent().isPresent());
     assertEquals(IntermediateType.LIST, node2Child.getParent().get().getValue());
 
-    final TypeNode mapNode = TypeNode.fromString("map<string,list<int>>");
+    final TypeNode mapNode = TypeNode.fromString("map<string, list<int>>");
     assertEquals(IntermediateType.MAP, mapNode.getValue());
     assertTrue(mapNode.getElementType().isPresent());
     assertTrue(mapNode.getKeyType().isPresent());
@@ -51,5 +55,6 @@ public class TypeNodeTest {
     assertEquals(IntermediateType.LIST, mapNode.getElementType().get().getValue());
     assertEquals(IntermediateType.INT,
         mapNode.getElementType().get().getElementType().get().getValue());
+    assertEquals("map<string, list<int>>", mapNode.toString());
   }
 }

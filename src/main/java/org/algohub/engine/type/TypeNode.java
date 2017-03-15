@@ -2,6 +2,8 @@ package org.algohub.engine.type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Optional;
 
@@ -16,7 +18,10 @@ import java.util.Optional;
  * <p> elementType will be empty if value is not a container type. </p>
  */
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.BeanMembersShouldSerialize", "PMD.SingularField",
-    "PMD.ShortVariable"}) public class TypeNode {
+    "PMD.ShortVariable"})
+// @JsonSerialize(using = TypeNodeSerializer.class) Do NOT use it !!!
+@JsonDeserialize(using = TypeNodeDeserializer.class)
+public class TypeNode {
   /**
    * type.
    */
@@ -62,6 +67,26 @@ import java.util.Optional;
     } else {
       throw new IllegalArgumentException("Type can not be empty!");
     }
+  }
+
+  @Override
+  public String toString() {
+    return toString(this);
+  }
+
+  private static String toString(TypeNode typeNode) {
+    if(!typeNode.isContainer()) {
+      return typeNode.value.toString();
+    }
+    final StringBuilder result = new StringBuilder(typeNode.value.toString() + "<");
+    if(typeNode.keyType.isPresent()) {
+      result.append(toString(typeNode.keyType.get()));
+      result.append(", ");
+    }
+    if(typeNode.elementType.isPresent()) {
+      result.append(toString(typeNode.elementType.get()));
+    }
+    return result + ">";
   }
 
   // construct a binary tre in post-order

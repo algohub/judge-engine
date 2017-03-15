@@ -3,10 +3,7 @@ package org.algohub.engine.pojo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import org.algohub.engine.type.TypeNode;
-import org.algohub.engine.type.TypeNodeDeserializer;
 
 
 /**
@@ -48,7 +45,7 @@ class Function {
     /**
      * Return data type.
      */
-    @JsonDeserialize(using = TypeNodeDeserializer.class) private final TypeNode type;
+    private final TypeNode type;
     /**
      * Comment of returned value.
      */
@@ -84,7 +81,7 @@ class Function {
     /**
      * Parameter type.
      */
-    @JsonDeserialize(using = TypeNodeDeserializer.class) private final TypeNode type;
+    private final TypeNode type;
     /**
      * Parameter comment.
      */
