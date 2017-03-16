@@ -12,6 +12,7 @@ import org.algohub.engine.util.ObjectMapperInstance;
 
 import java.io.File;
 import java.io.IOException;
+import org.algohub.engine.bo.StatusCode;
 
 
 /**
@@ -45,7 +46,7 @@ public class CppJudge implements JudgeInterface {
       final JudgeResult result;
 
       if (compileResult.getExitCode() != 0) { // COMPILE_ERROR
-        result = new JudgeResult(StatusCode.COMPILE_ERROR.toInt(),
+        result = new JudgeResult(StatusCode.COMPILE_ERROR,
             createFriendlyMessage(compileResult.getStderr()), null, null, null, 0, testCases.length,
             0, 0);
       } else { // run
@@ -70,7 +71,7 @@ public class CppJudge implements JudgeInterface {
           }
           default: { // Other runtime errors
             result =
-                new JudgeResult(StatusCode.RUNTIME_ERROR.toInt(), runResult.getStderr(), null, null,
+                new JudgeResult(StatusCode.RUNTIME_ERROR, runResult.getStderr(), null, null,
                     null, 0, testCases.length, time, 0);
           }
         }
@@ -78,7 +79,7 @@ public class CppJudge implements JudgeInterface {
       JudgeInterface.removeRecursive(tmpDir.toPath());
       return result;
     } catch (IOException | InterruptedException ex) {
-      return new JudgeResult(StatusCode.RUNTIME_ERROR.toInt(),
+      return new JudgeResult(StatusCode.RUNTIME_ERROR,
           ex.getClass().getName() + ", " + ex.getMessage(), null, null, null, 0, testCases.length,
           0, 0);
     }

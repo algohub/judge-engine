@@ -10,7 +10,7 @@ import org.algohub.engine.judge.CsharpJudge;
 import org.algohub.engine.judge.JavaJudge;
 import org.algohub.engine.judge.JavaScriptJudge;
 import org.algohub.engine.judge.PythonJudge;
-import org.algohub.engine.judge.StatusCode;
+import org.algohub.engine.bo.StatusCode;
 import org.algohub.engine.pojo.Function;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.type.LanguageType;
@@ -65,7 +65,7 @@ public class JudgeEngine {
     final JudgeEngine judgeEngine = new JudgeEngine();
     final JudgeResult result = judgeEngine.judge(problem, userCode, languageType);
 
-    if (result.getStatusCode() == StatusCode.ACCEPTED.toInt()) {
+    if (result.getStatusCode() == StatusCode.ACCEPTED) {
       System.out.println("Accepted!");
     } else {
       System.err.println("Wrong Answer!\n" + result);

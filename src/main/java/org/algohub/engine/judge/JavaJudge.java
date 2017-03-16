@@ -9,6 +9,7 @@ import org.algohub.engine.serde.Serializer;
 import org.algohub.engine.type.TypeNode;
 import org.algohub.engine.util.Equals;
 import org.algohub.engine.pojo.Function;
+import org.algohub.engine.bo.StatusCode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,13 +41,13 @@ public class JavaJudge implements JudgeInterface {
       final JudgeOneCaseResult oneResult = judge(clazz, method, testCase, returnType);
       if (!oneResult.correct) {
         final long time = System.currentTimeMillis() - start;
-        return new JudgeResult(StatusCode.WRONG_ANSWER.toInt(), null,
+        return new JudgeResult(StatusCode.WRONG_ANSWER, null,
             testCasesJson[i].getInput().toString(), oneResult.wrongOutput,
             testCasesJson[i].getOutput().toString(), i + 1, testCases.length, time, 0L);
       }
     }
     final long time = System.currentTimeMillis() - start;
-    return new JudgeResult(StatusCode.ACCEPTED.toInt(), null, null, null, null, testCases.length,
+    return new JudgeResult(StatusCode.ACCEPTED, null, null, null, null, testCases.length,
         testCases.length, time, 0);
   }
 
@@ -144,7 +145,7 @@ public class JavaJudge implements JudgeInterface {
   }
 
   private static class JudgeOneCaseResult {
-    public boolean correct;
-    public String wrongOutput;
+    boolean correct;
+    String wrongOutput;
   }
 }

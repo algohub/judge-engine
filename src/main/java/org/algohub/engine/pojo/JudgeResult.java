@@ -3,7 +3,7 @@ package org.algohub.engine.pojo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.algohub.engine.judge.StatusCode;
+import org.algohub.engine.bo.StatusCode;
 
 
 /**
@@ -11,7 +11,7 @@ import org.algohub.engine.judge.StatusCode;
  */
 @SuppressWarnings("PMD.CommentRequired")
 public final class JudgeResult {
-  @JsonProperty("status_code") private int statusCode;
+  @JsonProperty("status_code") private StatusCode statusCode;
   @JsonProperty("error_message") private String errorMessage;
   private String input;
   private String output;
@@ -24,7 +24,7 @@ public final class JudgeResult {
   /**
    * Since this class is immutable, need to provide a method for Jackson.
    */
-  @JsonCreator public JudgeResult(@JsonProperty("status_code") final int statusCode,
+  @JsonCreator public JudgeResult(@JsonProperty("status_code") final StatusCode statusCode,
       @JsonProperty("error_message") final String errorMessage,
       @JsonProperty("input") final String input, @JsonProperty("output") final String output,
       @JsonProperty("expected_output") final String expectedOutput,
@@ -47,16 +47,16 @@ public final class JudgeResult {
    * Constructor.
    */
   public JudgeResult(final String compileErrorMsg) {
-    this.statusCode = StatusCode.COMPILE_ERROR.toInt();
+    this.statusCode = StatusCode.COMPILE_ERROR;
     this.errorMessage = compileErrorMsg;
   }
 
   // PENDING or RUNNING
   public JudgeResult(final StatusCode statusCode) {
-    this.statusCode = statusCode.toInt();
+    this.statusCode = statusCode;
   }
 
-  public int getStatusCode() {
+  public StatusCode getStatusCode() {
     return statusCode;
   }
 

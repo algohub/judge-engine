@@ -1,8 +1,10 @@
 package org.algohub.engine.judge;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableMap;
 
 import org.algohub.engine.JudgeEngine;
+import org.algohub.engine.bo.StatusCode;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.type.LanguageType;
@@ -58,6 +60,13 @@ final class JudgeEngineTestUtil {
   private static void judgeOne(final Problem problem, final String userCode,
       LanguageType languageType) {
     final JudgeResult result = JUDGE_ENGINE.judge(problem, userCode, languageType);
-    assertEquals(StatusCode.ACCEPTED.toInt(), result.getStatusCode());
+    if(StatusCode.ACCEPTED != result.getStatusCode()) {
+      try {
+        System.err.println(ObjectMapperInstance.INSTANCE.writeValueAsString(result));
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+      }
+    }
+    assertEquals(StatusCode.ACCEPTED, result.getStatusCode());
   }
 }

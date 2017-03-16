@@ -4,7 +4,7 @@ package org.algohub.engine.codegenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.algohub.engine.judge.CppJudge;
-import org.algohub.engine.judge.StatusCode;
+import org.algohub.engine.bo.StatusCode;
 import org.algohub.engine.pojo.Function;
 import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.type.LanguageType;
@@ -55,7 +55,7 @@ public class CppCodeGeneratorTest {
     }
     final CppJudge judge = new CppJudge();
     final JudgeResult result = judge.judge(function, testCases, solution);
-    assertEquals(StatusCode.ACCEPTED.toInt(), result.getStatusCode());
+    assertEquals(StatusCode.ACCEPTED, result.getStatusCode());
   }
 
   @Test public void generateTypeDeclarationTest() {

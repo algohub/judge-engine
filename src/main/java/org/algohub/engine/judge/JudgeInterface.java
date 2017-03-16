@@ -4,6 +4,7 @@ import org.algohub.engine.bo.ProcessResult;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.pojo.Function;
+import org.algohub.engine.bo.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

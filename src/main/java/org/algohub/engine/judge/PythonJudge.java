@@ -9,6 +9,7 @@ import org.algohub.engine.pojo.Function;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.util.ObjectMapperInstance;
+import org.algohub.engine.bo.StatusCode;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,21 +52,21 @@ public class PythonJudge implements JudgeInterface {
           break;
         }
         case 1: { // Compile Error
-          result = new JudgeResult(StatusCode.COMPILE_ERROR.toInt(),
+          result = new JudgeResult(StatusCode.COMPILE_ERROR,
               createFriendlyMessage(runResult.getStderr()), null, null, null, 0, testCases.length,
               0, 0);
           break;
         }
         default: { // Other runtime errors
           result =
-              new JudgeResult(StatusCode.RUNTIME_ERROR.toInt(), runResult.getStderr(), null, null,
+              new JudgeResult(StatusCode.RUNTIME_ERROR, runResult.getStderr(), null, null,
                   null, 0, testCases.length, time, 0);
         }
       }
       JudgeInterface.removeRecursive(tmpDir.toPath());
       return result;
     } catch (IOException | InterruptedException ex) {
-      return new JudgeResult(StatusCode.RUNTIME_ERROR.toInt(),
+      return new JudgeResult(StatusCode.RUNTIME_ERROR,
           ex.getClass().getName() + ", " + ex.getMessage(), null, null, null, 0, testCases.length,
           0, 0);
     }
