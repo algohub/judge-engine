@@ -82,6 +82,10 @@ public class Problem {
     }
   }
 
+  public String getId() {
+    return this.title.get("en").replaceAll("\\s+", "-").replaceAll("['\\(\\),]+", "").toLowerCase();
+  }
+
   public Map<String, String> getTitle() {
     return title;
   }
