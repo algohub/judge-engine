@@ -1,5 +1,6 @@
 package org.algohub.engine.type;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -23,13 +24,14 @@ public enum IntermediateType {
    */
   private final String text;
 
-  private IntermediateType(final String text) {
+  IntermediateType(final String text) {
     this.text = text;
   }
 
   /**
-   * Return real Enum from string name.
+   * Return real Enum from string.
    */
+  @JsonCreator
   public static IntermediateType fromString(final String text) {
     if (text != null) {
       for (final IntermediateType v : IntermediateType.values()) {
@@ -44,11 +46,8 @@ public enum IntermediateType {
   /**
    * {@inheritDoc}.
    */
+  @JsonValue
   @Override public String toString() {
-    return text;
-  }
-
-  @JsonValue public String getText() {
     return text;
   }
 }

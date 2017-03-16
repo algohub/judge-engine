@@ -10,39 +10,42 @@ import java.util.Map;
  * Supported Languages.
  */
 public enum LanguageType {
-  JAVASCRIPT,
-  JAVA,
-  CPLUSPLUS,
-  CSHARP,
-  PYTHON,
-  RUBY;
+  JAVASCRIPT("JavaScript"),
+  JAVA("Java"),
+  CPLUSPLUS("C++"),
+  CSHARP("C#"),
+  PYTHON("Python"),
+  RUBY("Ruby");
 
-  private static Map<String, LanguageType> nameToEnumMap = new HashMap<>(6);
-  private static Map<LanguageType, String> enumToNameMap = new HashMap<>(6);
+  /**
+   * Text for display.
+   */
+  private final String text;
 
-  static {
-    nameToEnumMap.put("javascript", JAVASCRIPT);
-    nameToEnumMap.put("java", JAVA);
-    nameToEnumMap.put("cpp", CPLUSPLUS);
-    nameToEnumMap.put("csharp", CSHARP);
-    nameToEnumMap.put("python", PYTHON);
-    nameToEnumMap.put("ruby", RUBY);
-
-    enumToNameMap.put(JAVASCRIPT, "javascript");
-    enumToNameMap.put(JAVA, "java");
-    enumToNameMap.put(CPLUSPLUS, "cpp");
-    enumToNameMap.put(CSHARP, "csharp#");
-    enumToNameMap.put(PYTHON, "python");
-    enumToNameMap.put(RUBY, "ruby");
+  LanguageType(final String text) {
+    this.text = text;
   }
 
+  /**
+   * Return real Enum from string.
+   */
   @JsonCreator
-  public static LanguageType fromValue(String value) {
-    return nameToEnumMap.get(value);
+  public static LanguageType fromString(String text) {
+    if (text != null) {
+      for (final LanguageType v : LanguageType.values()) {
+        if (text.equalsIgnoreCase(v.text)) {
+          return v;
+        }
+      }
+    }
+    throw new IllegalArgumentException("Unrecognized language: " + text);
   }
 
+  /**
+   * {@inheritDoc}.
+   */
   @JsonValue
-  public String toValue() {
-    return enumToNameMap.get(this);
+  @Override public String toString() {
+    return text;
   }
 }
