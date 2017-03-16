@@ -13,10 +13,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <guava.version>21.0</guava.version>
         <jackson.version>2.9.0.pr1</jackson.version>
         <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
-        <jdk.version>1.8</jdk.version>
         <junit.version>4.12</junit.version>
         <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
@@ -62,16 +64,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                    <encoding>UTF8</encoding>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>${maven.assembly.plugin.version}</version>
