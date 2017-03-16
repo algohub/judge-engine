@@ -1,7 +1,6 @@
 package org.algohub.engine.judge;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.ImmutableMap;
 
 import org.algohub.engine.JudgeEngine;
 import org.algohub.engine.bo.StatusCode;
@@ -23,15 +22,10 @@ import static org.junit.Assert.fail;
 final class JudgeEngineTestUtil {
   private static final JudgeEngine JUDGE_ENGINE = new JudgeEngine();
 
-  private static final ImmutableMap<LanguageType, String> LANGUAGE_TO_EXTENSION =
-      ImmutableMap.<LanguageType, String>builder().put(LanguageType.JAVA, ".java")
-          .put(LanguageType.JAVASCRIPT, ".js").put(LanguageType.CPLUSPLUS, ".cpp")
-          .put(LanguageType.PYTHON, ".py").put(LanguageType.RUBY, ".rb").build();
-
   static void batchJudge(final LanguageType languageType) {
     final File rootDir = new File("src/test/resources/solutions/");
     final File problemDir = new File("src/test/resources/problems/");
-    final Pattern pattern = Pattern.compile("\\w+\\" + LANGUAGE_TO_EXTENSION.get(languageType));
+    final Pattern pattern = Pattern.compile("\\w+/\\." + languageType.getFileSuffix());
 
     try {
       for (final File solutionDir : rootDir.listFiles()) {

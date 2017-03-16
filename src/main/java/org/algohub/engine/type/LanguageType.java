@@ -10,12 +10,23 @@ import java.util.Map;
  * Supported Languages.
  */
 public enum LanguageType {
-  JAVASCRIPT("JavaScript"),
   JAVA("Java"),
-  CPLUSPLUS("C++"),
-  CSHARP("C#"),
   PYTHON("Python"),
-  RUBY("Ruby");
+  CPLUSPLUS("C++"),
+
+  CLOJURE("Clojure"),
+  CSHARP("C#"),
+  FSHARP("F#"),
+  GO("Go"),
+  HASKELL("Haskell"),
+  JAVASCRIPT("JavaScript"),
+  LUA("Lua"),
+  OCAML("Ocaml"),
+  RACKET("Racket"),
+  RUBY("Ruby"),
+  RUST("Rust"),
+  SCALA("Scala"),
+  SWIFT("Swift");
 
   /**
    * Text for display.
@@ -47,5 +58,34 @@ public enum LanguageType {
   @JsonValue
   @Override public String toString() {
     return text;
+  }
+
+  public String getFileSuffix() {
+    switch (this) {
+      case CPLUSPLUS:
+        return "cpp";
+      case PYTHON:
+        return "py";
+      case CLOJURE:
+        return "clj";
+      case CSHARP:
+        return "cs";
+      case FSHARP:
+        return "fs";
+      case HASKELL:
+        return "hs";
+      case JAVASCRIPT:
+        return "js";
+      case OCAML:
+        return "ml";
+      case RACKET:
+        return "rkt";
+      case RUBY:
+        return "rb";
+      case RUST:
+        return "rs";
+      default:
+        return text.toLowerCase();
+    }
   }
 }
