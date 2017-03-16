@@ -9,45 +9,43 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.util.Map;
 
 
-
 /**
  * Problem Java Object, corresponds to the problem JSON string.
  */
 @SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.UnusedPrivateField", "PMD.SingularField",
-    "PMD.ArrayIsStoredDirectly", "PMD.CommentRequired"}) @JsonIgnoreProperties(ignoreUnknown = true)
+    "PMD.ArrayIsStoredDirectly", "PMD.CommentRequired"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Problem {
-  @SuppressWarnings("PMD.ShortVariable") private final String id;
-  private final Map<String, String> title;
-  private final Map<String, String> description;
+  @JsonProperty(required = true) private final Map<String, String> title;
+  @JsonProperty(required = true) private final Map<String, String> description;
+  @JsonProperty(required = true) private final Function function;
+  @JsonProperty(value = "test_cases", required = true) private final TestCase[] testCases;
   private final String category;
   private final String[] tags;
   private final int difficulty;
   @JsonProperty("time_limit") private final int timeLimit;
   @JsonProperty("memory_limit") private final int memoryLimit;
   @JsonProperty("related_problems") private final String[] relatedProblems;
-  private final Function function;
   private final Map<String, String> author;
-  @JsonProperty("test_cases") private final TestCase[] testCases;
   @JsonProperty("test_cases_generator") private final String testCasesGenerator;
 
   /**
    * Since this class is immutable, need to provide a method for Jackson.
    */
   @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ShortVariable"}) @JsonCreator
-  public Problem(@JsonProperty("id") final String id,
-      @JsonProperty("title") final Map<String, String> title,
-      @JsonProperty("description") final Map<String, String> description,
+  public Problem(
+      @JsonProperty(value = "title", required = true) final Map<String, String> title,
+      @JsonProperty(value = "description", required = true) final Map<String, String> description,
+      @JsonProperty(value = "function", required = true) final Function function,
+      @JsonProperty(value = "test_cases", required = true) final TestCase[] testCases,
       @JsonProperty("category") final String category,
       @JsonProperty("tags") final String[] tags,
       @JsonProperty("difficulty") final int difficulty,
       @JsonProperty("time_limit") final int timeLimit,
       @JsonProperty("memory_limit") final int memoryLimit,
       @JsonProperty("related_problems") final String[] relatedProblems,
-      @JsonProperty("function") final Function function,
       @JsonProperty("author") final Map<String, String> author,
-      @JsonProperty("test_cases") final TestCase[] testCases,
       @JsonProperty("test_cases_generator") final String testCasesGenerator) {
-    this.id = id;
     this.title = title;
     this.description = description;
     this.category = category;
@@ -82,10 +80,6 @@ public class Problem {
     public JsonNode getOutput() {
       return output;
     }
-  }
-
-  public String getId() {
-    return id;
   }
 
   public Map<String, String> getTitle() {
