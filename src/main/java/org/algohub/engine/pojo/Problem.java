@@ -28,9 +28,10 @@ public class Problem {
   @JsonProperty("related_problems") private final String[] relatedProblems;
   private final Map<String, String> author;
   @JsonProperty("test_cases_generator") private final String testCasesGenerator;
+  private final Code solution;
 
   /**
-   * Since this class is immutable, need to provide a method for Jackson.
+   * Since some fields are immutable, need to provide a method for Jackson.
    */
   @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ShortVariable"}) @JsonCreator
   public Problem(
@@ -45,7 +46,8 @@ public class Problem {
       @JsonProperty("memory_limit") final int memoryLimit,
       @JsonProperty("related_problems") final String[] relatedProblems,
       @JsonProperty("author") final Map<String, String> author,
-      @JsonProperty("test_cases_generator") final String testCasesGenerator) {
+      @JsonProperty("test_cases_generator") final String testCasesGenerator,
+      @JsonProperty("solution") final Code solution) {
     this.title = title;
     this.description = description;
     this.category = category;
@@ -58,17 +60,19 @@ public class Problem {
     this.author = author;
     this.testCases = testCases;
     this.testCasesGenerator = testCasesGenerator;
+    this.solution = solution;
   }
 
   /**
    * Test cases.
    */
   @JsonIgnoreProperties(ignoreUnknown = true) public static class TestCase {
-    private final ArrayNode input;
-    private final JsonNode output;
+    @JsonProperty(required = true) private final ArrayNode input;
+    @JsonProperty(required = true) private final JsonNode output;
 
-    @JsonCreator public TestCase(@JsonProperty("input") final ArrayNode input,
-        @JsonProperty("output") final JsonNode output) {
+    @JsonCreator public TestCase(
+        @JsonProperty(value = "input", required = true) final ArrayNode input,
+        @JsonProperty(value = "output", required = true) final JsonNode output) {
       this.input = input;
       this.output = output;
     }
@@ -132,5 +136,9 @@ public class Problem {
 
   public String getTestCasesGenerator() {
     return testCasesGenerator;
+  }
+
+  public Code getSolution() {
+    return solution;
   }
 }
