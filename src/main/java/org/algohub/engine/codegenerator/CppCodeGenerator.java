@@ -17,18 +17,24 @@ public final class CppCodeGenerator {
    * Generate a  main.cpp to call solution.h.
    *
    * @param function the function type info
+   * @param fromFile read testcases from file or stdin
    * @return source code of main.cpp
    */
-  public static String generateMain(final Function function) {
+  public static String generateMain(final Function function, boolean fromFile) {
     final StringBuilder result = new StringBuilder();
     result.append("#include <algohub_serialize.h>\n#include <algohub_deserialize.h>\n#include "
-        + "<algohub_judge_result.h>\n#include <iostream>\n#include \"solution.h\"\n" + "\n" + "\n");
+        + "<algohub_judge_result.h>\n#include \"solution.cpp\"\n" + "\n" + "\n");
 
     Indentation.append(result, "int main(int argc, char* argv[]) {\n", 0);
     Indentation.append(result, "signal(SIGSEGV, sigsegv_handler);\n", 1);
     Indentation.append(result, "signal(SIGABRT, sigabrt_handler);\n\n", 1);
-    Indentation.append(result, "string testcases_text;\n", 1);
-    Indentation.append(result, "getline(cin, testcases_text);\n", 1);
+    if(fromFile) {
+      Indentation.append(result, "ifstream ifs(\"testcases.json\");\n", 1);
+      Indentation.append(result, "string testcases_text((istreambuf_iterator<char>(ifs)), (istreambuf_iterator<char>()));\n", 1);
+    } else {
+      Indentation.append(result, "string testcases_text;\n", 1);
+      Indentation.append(result, "getline(cin, testcases_text);\n", 1);
+    }
     Indentation.append(result, "rapidjson::Document testcases_json;\n", 1);
     Indentation.append(result, "testcases_json.Parse(testcases_text.c_str());\n", 1);
     Indentation.append(result, "assert (testcases_json.IsArray());\n\n", 1);

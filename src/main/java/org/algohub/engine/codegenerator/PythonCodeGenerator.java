@@ -18,10 +18,11 @@ public final class PythonCodeGenerator {
    * Generate the main function.
    *
    * @param function Function type info.
+   * @param fromFile read testcases from file or stdin
    * @return the complete source code
    */
   @SuppressWarnings({"PMD.PreserveStackTrace"})
-  public static String generateMain(final Function function) {
+  public static String generateMain(final Function function, boolean fromFile) {
     final StringBuilder result = new StringBuilder();
 
     result.append("import json\nimport collections\nfrom algohub import *\nimport solution\n\n"
@@ -42,7 +43,12 @@ public final class PythonCodeGenerator {
       throw new IllegalStateException(e.getMessage());
     }
 
-    Indentation.append(result, "raw_testcases = json.loads(input())\n", 1);
+    if(fromFile) {
+      Indentation.append(result, "with open(\"testcases.json\", \"r\") as f:\n", 1);
+      Indentation.append(result, "raw_testcases = json.loads(f.read())\n", 2);
+    } else {
+      Indentation.append(result, "raw_testcases = json.loads(input())\n", 1);
+    }
     Indentation.append(result, "assert isinstance(raw_testcases, list)\n\n", 1);
 
     Indentation.append(result, "for i in range(len(raw_testcases)):\n", 1);

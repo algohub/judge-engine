@@ -1,6 +1,13 @@
 package org.algohub.engine.judge;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import java.io.File;
+import java.util.function.UnaryOperator;
 import org.algohub.engine.bo.ProcessResult;
+import org.algohub.engine.codegenerator.CppCodeGenerator;
+import org.algohub.engine.codegenerator.PythonCodeGenerator;
+import org.algohub.engine.codegenerator.RubyCodeGenerator;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.pojo.Problem;
 import org.algohub.engine.pojo.Function;
@@ -17,6 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.TimeUnit;
+import org.algohub.engine.type.LanguageType;
+import org.algohub.engine.util.ObjectMapperInstance;
 
 
 /**
@@ -24,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  */
 public interface JudgeInterface {
   long TIMEOUT = 20;  // 20 seconds
-  String CPP_SOLUTION_FILE = "solution.h";
+  int N_TTY_BUF_SIZE = 4096;
 
   /**
    * Read a text file.
@@ -73,12 +82,47 @@ public interface JudgeInterface {
     return new ProcessResult(exitCode, stdout, stderr);
   }
 
+  static JudgeResult runCode(final String[] command, String input, File cwd) {
+    try {
+      final Process runCommand = (new ProcessBuilder(command)).directory(cwd).start();
+      final long start = System.currentTimeMillis();
+      final ProcessResult runResult = runCommand(runCommand, input, TIMEOUT);
+      final long time = System.currentTimeMillis() - start;
+
+      final JudgeResult result;
+      switch (runResult.getExitCode()) {
+        case 0:  // ACCEPTED or WRONG_ANSWER
+        case 11: { // Segmentation fault
+          final String lastLine;
+          {
+            final String output = runResult.getExitCode() == 0 ? runResult.getStdout() :
+                runResult.getStderr();
+            final String[] splitted = output.split("\n");
+            lastLine = splitted[splitted.length - 1];
+          }
+          result = ObjectMapperInstance.INSTANCE.readValue(lastLine, JudgeResult.class);
+          break;
+        }
+        default: { // Other runtime errors
+          result = new JudgeResult(StatusCode.RUNTIME_ERROR, runResult.getStderr(), null, null,
+              null, 0, 0, time, 0);
+        }
+      }
+      JudgeInterface.removeRecursive(cwd.toPath());
+      return result;
+    } catch (IOException | InterruptedException ex) {
+      return new JudgeResult(StatusCode.RUNTIME_ERROR,
+          ex.getClass().getName() + ", " + ex.getMessage(), null, null, null, 0, 0,
+          0, 0);
+    }
+  }
+
   /**
    * Delete a directory recursively.
    *
    * @param path path
    * @throws IOException exception happens
-   * @see http://stackoverflow.com/questions/779519/delete-directories-recursively-in-java
+   * @see <a href="http://stackoverflow.com/questions/779519/delete-directories-recursively-in-java">Delete directories recursively in Java</a>
    */
   static void removeRecursive(final Path path) throws IOException {
     java.nio.file.Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -120,4 +164,100 @@ public interface JudgeInterface {
    */
   JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
       final String userCode) throws IOException, InterruptedException;
+
+  /**
+   * Judge the code written by a user.
+   *
+   * @param function  Function type metadata.
+   * @param testCases test cases
+   * @param userCode  A function written by user.
+   * @param language  The programming language that userCode uses
+   * @param createFriendlyMessage Create friendly message
+   * @return If the output is identical with the test case, JudgeResult.succeed will be true,
+   * otherwise, JudgeResult.succeed will be false and contain both output results.
+   */
+  static JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
+      final String userCode, final LanguageType language, UnaryOperator<String> createFriendlyMessage) {
+    try {
+      final File tmpDir = Files.createTempDir();
+      final String testcasesText = ObjectMapperInstance.INSTANCE.writeValueAsString(testCases);
+      final boolean fromFile = testcasesText.length() > N_TTY_BUF_SIZE;
+
+      // write solution file
+      String solutionFile = "solution." + language.getFileSuffix();
+      Files.asCharSink(new File(tmpDir, solutionFile), Charsets.UTF_8).write(userCode);
+
+      // write main file
+      final String mainCode;
+      final boolean needCompile;
+      switch (language) {
+        case CPLUSPLUS:
+          needCompile = true;
+          mainCode = CppCodeGenerator.generateMain(function, fromFile);
+          break;
+        case PYTHON:
+          needCompile = false;
+          mainCode = PythonCodeGenerator.generateMain(function, fromFile);
+          break;
+        case RUBY:
+          needCompile = false;
+          mainCode = RubyCodeGenerator.generateMain(function, fromFile);
+          break;
+        default:
+          throw new IllegalArgumentException("Not supported language " + language);
+      }
+      final String mainFilename = "main." + language.getFileSuffix();
+      Files.asCharSink(new File(tmpDir, mainFilename), Charsets.UTF_8).write(mainCode);
+
+      // compile, will generate a executable file named "main"
+      if(needCompile) {
+        final String[] compileCommand;
+        switch (language) {
+          case CPLUSPLUS:
+            compileCommand = new String[]{"g++", "--std=c++17", mainFilename, "-O3", "-o", "main"};
+            break;
+          default:
+            throw new IllegalArgumentException("Not supported language " + language);
+        }
+
+        final Process compileProcess = (new ProcessBuilder(compileCommand)).directory(tmpDir).start();
+        final ProcessResult compileResult = JudgeInterface.runCommand(compileProcess, null,
+            TIMEOUT);
+        if (compileResult.getExitCode() != 0) { // COMPILE_ERROR
+          return new JudgeResult(StatusCode.COMPILE_ERROR,
+              createFriendlyMessage.apply(compileResult.getStderr()), null, null, null, 0,
+              testCases.length,
+              0, 0);
+        }
+      }
+
+      // run
+      final String[] runCommand;
+      if(needCompile) {
+        runCommand = new String[]{"./main"};
+      } else {
+        switch (language) {
+          case PYTHON:
+            runCommand = new String[]{"python3", mainFilename};
+            break;
+          case RUBY:
+            runCommand = new String[]{"ruby", mainFilename};
+            break;
+          default:
+            throw new IllegalArgumentException("Not supported language " + language);
+        }
+      }
+      if(fromFile) {
+        // write testcases to file if length > 4096
+        Files.asCharSink(new File(tmpDir, "testcases.json"), Charsets.UTF_8).write(testcasesText);
+        return JudgeInterface.runCode(runCommand, null, tmpDir);
+      } else {
+        return JudgeInterface.runCode(runCommand, testcasesText, tmpDir);
+      }
+    } catch (IOException | InterruptedException ex) {
+      return new JudgeResult(StatusCode.RUNTIME_ERROR,
+          ex.getClass().getName() + ", " + ex.getMessage(), null, null, null, 0, testCases.length,
+          0, 0);
+    }
+  }
 }

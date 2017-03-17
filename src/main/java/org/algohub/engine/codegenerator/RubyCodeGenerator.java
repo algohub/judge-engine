@@ -18,10 +18,11 @@ public final class RubyCodeGenerator {
    * Generate the main function.
    *
    * @param function Funciton prototype.
+   * @param fromFile read testcases from file or stdin
    * @return the complete source code.
    */
   @SuppressWarnings({"PMD.PreserveStackTrace"})
-  public static String generateMain(final Function function) {
+  public static String generateMain(final Function function, boolean fromFile) {
     final StringBuilder result = new StringBuilder();
 
     result.append("require 'json'\nrequire 'algohub'\nrequire_relative './solution'\n\n\n"
@@ -41,7 +42,11 @@ public final class RubyCodeGenerator {
       throw new IllegalStateException(e.getMessage());
     }
 
-    Indentation.append(result, "raw_testcases = JSON.parse(STDIN.gets())\n\n", 1);
+    if(fromFile) {
+      Indentation.append(result, "raw_testcases = JSON.parse(IO.read(\"testcases.json\"))\n\n", 1);
+    } else {
+      Indentation.append(result, "raw_testcases = JSON.parse(STDIN.gets())\n\n", 1);
+    }
 
     Indentation.append(result, "(0..raw_testcases.size()-1).each do |i|\n", 1);
     Indentation.append(result, "test_case = raw_testcases[i]\n", 2);

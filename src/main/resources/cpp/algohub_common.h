@@ -3,7 +3,9 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <fstream> // for std::ifstream
 #include <functional>
+#include <iterator>
 #include <limits>
 #include <memory>  // for std::shared_ptr
 #include <queue>
