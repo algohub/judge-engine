@@ -75,7 +75,7 @@ public final class PythonCodeGenerator {
 
     Indentation.append(result, "if actual_output != expected_output:\n", 2);
     Indentation.append(result, "print(JudgeResult(StatusCode.WRONG_ANSWER).to_json())\n", 3);
-    Indentation.append(result, "sys.exit(0)\n\n", 3);
+    Indentation.append(result, "exit(0)\n\n", 3);
 
 
     Indentation.append(result, "print(JudgeResult(StatusCode.ACCEPTED).to_json())\n", 1);
