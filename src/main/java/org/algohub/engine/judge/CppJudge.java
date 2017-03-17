@@ -20,9 +20,16 @@ public class CppJudge implements JudgeInterface {
   }
 
   private static String createFriendlyMessage(final String errorMessage) {
+    if(errorMessage == null || errorMessage.isEmpty()) return null;
+
     final StringBuilder sb = new StringBuilder();
     final String[] lines = errorMessage.split("\n");
     final String CPP_SOLUTION_FILE = "solution." + LanguageType.CPLUSPLUS.getFileSuffix();
+
+    if(errorMessage.contains("main.cpp: In function") && errorMessage.contains("was not declared in this scope") ) {
+      int pos = lines[1].indexOf("error:");
+      return lines[1].substring(pos);
+    }
 
     int startLine = 0;
     for (final String line : lines) {

@@ -20,8 +20,14 @@ public class PythonJudge implements JudgeInterface {
   }
 
   private static String createFriendlyMessage(final String errorMessage) {
+    if(errorMessage == null || errorMessage.isEmpty()) return null;
+
     final StringBuilder sb = new StringBuilder();
     final String[] lines = errorMessage.split("\n");
+
+    if(errorMessage.contains("AttributeError: module 'solution' has no attribute")) {
+      return lines[3];
+    }
 
     int startLine = 0;
     for (final String line : lines) {

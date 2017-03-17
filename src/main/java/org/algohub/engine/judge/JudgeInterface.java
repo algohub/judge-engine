@@ -247,13 +247,16 @@ public interface JudgeInterface {
             throw new IllegalArgumentException("Not supported language " + language);
         }
       }
+      final JudgeResult result;
       if(fromFile) {
         // write testcases to file if length > 4096
         Files.asCharSink(new File(tmpDir, "testcases.json"), Charsets.UTF_8).write(testcasesText);
-        return JudgeInterface.runCode(runCommand, null, tmpDir);
+        result = JudgeInterface.runCode(runCommand, null, tmpDir);
       } else {
-        return JudgeInterface.runCode(runCommand, testcasesText, tmpDir);
+        result = JudgeInterface.runCode(runCommand, testcasesText, tmpDir);
       }
+      result.setErrorMessage(createFriendlyMessage.apply(result.getErrorMessage()));
+      return result;
     } catch (IOException | InterruptedException ex) {
       return new JudgeResult(StatusCode.RUNTIME_ERROR,
           ex.getClass().getName() + ", " + ex.getMessage(), null, null, null, 0, testCases.length,

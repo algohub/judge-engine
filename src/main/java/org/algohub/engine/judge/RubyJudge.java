@@ -20,11 +20,13 @@ public class RubyJudge implements JudgeInterface {
   }
 
   private static String createFriendlyMessage(final String errorMessage) {
+    if(errorMessage == null || errorMessage.isEmpty()) return null;
+
     final StringBuilder sb = new StringBuilder();
     final String[] lines = errorMessage.split("\n");
 
-    if (lines[0].contains("in `block in <main>': undefined method")) {
-      final int pos = lines[0].indexOf("in `block in <main>': undefined method");
+    if (errorMessage.contains("for main:Object (NoMethodError)")) {
+      final int pos = lines[0].indexOf("undefined method");
       return lines[0].substring(pos);
     }
 

@@ -123,6 +123,8 @@ public class JavaJudge implements JudgeInterface {
   }
 
   private String createFriendlyMessage(final String errorMessage) {
+    if(errorMessage == null || errorMessage.isEmpty()) return null;
+
     final StringBuilder sb = new StringBuilder();
     final String[] lines = errorMessage.split("\n");
     for (final String line : lines) {

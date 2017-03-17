@@ -22,7 +22,7 @@ public final class JudgeResult {
   @JsonProperty("consumed_memory") private long consumedMemory;  // bytes
 
   /**
-   * Since this class is immutable, need to provide a method for Jackson.
+   * Since some fields are immutable, need to provide a method for Jackson.
    */
   @JsonCreator public JudgeResult(@JsonProperty("status_code") final StatusCode statusCode,
       @JsonProperty("error_message") final String errorMessage,
@@ -62,6 +62,10 @@ public final class JudgeResult {
 
   public String getErrorMessage() {
     return errorMessage;
+  }
+
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
   }
 
   public String getInput() {
