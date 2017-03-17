@@ -9,6 +9,6 @@ public final class ObjectMapperInstance {
 
   static {
     INSTANCE.registerModule(new Jdk8Module());
-    INSTANCE.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+    INSTANCE.setSerializationInclusion(JsonInclude.Include.NON_NULL);
   }
 }
