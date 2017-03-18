@@ -7,8 +7,8 @@ import org.algohub.engine.type.LanguageType;
 
 
 public class PythonJudge implements JudgeInterface {
-  private static final String IMPORTS = "import collections\n\n\n";
-  private static final int IMPORTS_LINES = 3;
+  private static final String IMPORTS = "import collections\nimport math\n\n\n";
+  private static final int IMPORTS_LINES = 4;
 
   /**
    * @{inhericDoc}.
