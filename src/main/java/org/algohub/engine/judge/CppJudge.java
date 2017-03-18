@@ -1,5 +1,7 @@
 package org.algohub.engine.judge;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.algohub.engine.pojo.Function;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.pojo.Problem;
@@ -25,40 +27,18 @@ public class CppJudge implements JudgeInterface {
     final StringBuilder sb = new StringBuilder();
     final String[] lines = errorMessage.split("\n");
     final String CPP_SOLUTION_FILE = "solution." + LanguageType.CPLUSPLUS.getFileSuffix();
+    final Pattern pattern = Pattern.compile("solution\\.cpp:(\\d+):\\d+:");
 
-    if(errorMessage.contains("main.cpp: In function") && errorMessage.contains("was not declared in this scope") ) {
-      int pos = lines[1].indexOf("error:");
-      return lines[1].substring(pos);
-    }
-
-    int startLine = 0;
-    for (final String line : lines) {
-      final int pos = line.indexOf(CPP_SOLUTION_FILE);
-      if (pos > 0) {
-        break;
-      }
-      startLine++;
-    }
-    if (startLine == lines.length) { // default to original
-      return errorMessage;
-    }
-    for (int i = startLine; i < lines.length; ++i) {
-      final String line = lines[i];
-      final int pos = line.indexOf(CPP_SOLUTION_FILE);
-      if (pos > 0) {
-        final int pos1 = line.indexOf(CPP_SOLUTION_FILE + ": ");
-        final String friendlyMessage;
-        if (pos1 > 0) {
-          friendlyMessage = line.substring(pos + CPP_SOLUTION_FILE.length() + 2);
-        } else {
-          friendlyMessage = "Line" + line.substring(pos + CPP_SOLUTION_FILE.length());
-        }
-        sb.append(friendlyMessage).append('\n');
-      } else {
-        sb.append(line).append('\n');
+    for(int i = 0; i < lines.length; i+=4) {
+      if(lines[i].startsWith("In file included from main.cpp:") && lines[i+1].startsWith(CPP_SOLUTION_FILE)) {
+        sb.append("Line " + lines[i+1].substring(CPP_SOLUTION_FILE.length() + 1)).append('\n');
+        sb.append(lines[i+2]).append('\n');
+        sb.append(lines[i+3]).append('\n');
+      } else if(lines[i].startsWith("main.cpp: In function") && lines[i+1].contains("was not declared in this scope") ) {
+        int pos = lines[i+1].indexOf("error:");
+        sb.append(lines[i+1].substring(pos)).append('\n');
       }
     }
-
     return sb.toString();
   }
 }
