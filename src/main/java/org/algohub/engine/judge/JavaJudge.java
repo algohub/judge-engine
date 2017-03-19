@@ -87,7 +87,11 @@ public class JavaJudge implements JudgeInterface {
     for (int i = 0; i < testCases.length; ++i) {
       internalTestCases[i] = new InternalTestCase(testCases[i], function);
     }
-    return judge(function, internalTestCases, userCode, testCases);
+    try {
+      return judge(function, internalTestCases, userCode, testCases);
+    } catch (NoSuchMethodError ex) {
+      return new JudgeResult(ex.getClass().getCanonicalName() + ": " + ex.getMessage());
+    }
   }
 
   /**
