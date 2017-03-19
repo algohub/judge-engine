@@ -27,6 +27,8 @@ public class PythonJudge implements JudgeInterface {
 
     if(errorMessage.contains("AttributeError: module 'solution' has no attribute")) {
       return lines[3];
+    } else if(lines[0].startsWith("Traceback (most recent call last):") && lines[3].startsWith("TypeError:") && lines[3].contains("required positional argument")) {
+      return lines[3];
     }
 
     int startLine = 0;
