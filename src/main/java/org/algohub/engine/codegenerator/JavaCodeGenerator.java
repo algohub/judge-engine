@@ -17,8 +17,11 @@ public final class JavaCodeGenerator {
    */
   public static final ImmutableMap<IntermediateType, String> JAVA_CLASS_MAP =
       ImmutableMap.<IntermediateType, String>builder().put(IntermediateType.BOOL, "Boolean")
-          .put(IntermediateType.STRING, "String").put(IntermediateType.DOUBLE, "Double")
-          .put(IntermediateType.INT, "Integer").put(IntermediateType.LONG, "Long").build();
+          .put(IntermediateType.CHAR, "Character")
+          .put(IntermediateType.STRING, "String")
+          .put(IntermediateType.DOUBLE, "Double")
+          .put(IntermediateType.INT, "Integer")
+          .put(IntermediateType.LONG, "Long").build();
 
   private JavaCodeGenerator() {}
 

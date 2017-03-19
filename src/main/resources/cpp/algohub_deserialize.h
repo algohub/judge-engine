@@ -14,6 +14,11 @@ void from_json(const rapidjson::Value &json, bool &result) {
 }
 
 template<>
+void from_json(const rapidjson::Value &json, char &result) {
+    result = json.GetString()[0];
+}
+
+template<>
 void from_json(const rapidjson::Value &json, int &result) {
     result = json.GetInt();
 }
@@ -61,14 +66,24 @@ void from_json(const rapidjson::Value &json, std::unordered_map<bool, V> &my_map
     assert(json.IsObject());
 
     for (rapidjson::Value::ConstMemberIterator i = json.MemberBegin(); i != json.MemberEnd(); ++i) {
-        bool key;
+        // only allow strings as keys
         assert(i->name.IsString());
-        rapidjson::Value name;
-        {
-            const bool real_value = std::stoi(std::string(i->name.GetString()));
-            name.SetBool(real_value);
-        }
-        from_json(name, key);
+        const bool key = std::string(i->name.GetString()) == std::string("true");
+        V value;
+        from_json(i->value, value);
+        my_map.insert({ key, value });
+    }
+}
+
+// only allow primitive types as keys, this version is for char keys
+template<typename V>
+void from_json(const rapidjson::Value &json, std::unordered_map<char, V> &my_map) {
+    assert(json.IsObject());
+
+    for (rapidjson::Value::ConstMemberIterator i = json.MemberBegin(); i != json.MemberEnd(); ++i) {
+        // only allow strings as keys
+        assert(i->name.IsString());
+        const char key = i->name.GetString()[0];
         V value;
         from_json(i->value, value);
         my_map.insert({ key, value });
@@ -81,14 +96,9 @@ void from_json(const rapidjson::Value &json, std::unordered_map<int, V> &my_map)
     assert(json.IsObject());
 
     for (rapidjson::Value::ConstMemberIterator i = json.MemberBegin(); i != json.MemberEnd(); ++i) {
-        int key;
+        // only allow strings as keys
         assert(i->name.IsString());
-        rapidjson::Value name;
-        {
-            const int real_value = std::stoi(std::string(i->name.GetString()));
-            name.SetInt(real_value);
-        }
-        from_json(name, key);
+        const int key = std::stoi(std::string(i->name.GetString()));
         V value;
         from_json(i->value, value);
         my_map.insert({ key, value });
@@ -101,14 +111,9 @@ void from_json(const rapidjson::Value &json, std::unordered_map<long long, V> &m
     assert(json.IsObject());
 
     for (rapidjson::Value::ConstMemberIterator i = json.MemberBegin(); i != json.MemberEnd(); ++i) {
-        long long key;
+        // only allow strings as keys
         assert(i->name.IsString());
-        rapidjson::Value name;
-        {
-            const long long real_value = std::stoi(std::string(i->name.GetString()));
-            name.SetInt64(real_value);
-        }
-        from_json(name, key);
+        const long long key = std::stoll(std::string(i->name.GetString()));
         V value;
         from_json(i->value, value);
         my_map.insert({ key, value });
@@ -121,14 +126,9 @@ void from_json(const rapidjson::Value &json, std::unordered_map<double, V> &my_m
     assert(json.IsObject());
 
     for (rapidjson::Value::ConstMemberIterator i = json.MemberBegin(); i != json.MemberEnd(); ++i) {
-        double key;
+        // only allow strings as keys
         assert(i->name.IsString());
-        rapidjson::Value name;
-        {
-            const double real_value = std::stoi(std::string(i->name.GetString()));
-            name.SetDouble(real_value);
-        }
-        from_json(name, key);
+        const double key = std::stod(std::string(i->name.GetString()));
         V value;
         from_json(i->value, value);
         my_map.insert({ key, value });
@@ -142,10 +142,9 @@ void from_json(const rapidjson::Value &json, std::unordered_map<std::string, V> 
     assert(json.IsObject());
 
     for (rapidjson::Value::ConstMemberIterator i = json.MemberBegin(); i != json.MemberEnd(); ++i) {
-        std::string key;
         // only allow strings as keys
         assert(i->name.IsString());
-        from_json(i->name, key);
+        std::string key = std::string(i->name.GetString());
         V value;
         from_json(i->value, value);
         my_map.insert({ key, value });

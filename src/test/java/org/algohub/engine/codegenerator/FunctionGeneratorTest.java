@@ -51,7 +51,7 @@ public class FunctionGeneratorTest {
         FunctionGenerator.generateTypeDeclaration(complexType, LanguageType.RUBY);
     assertEquals("ArrayList<HashMap<String,int[]>>", complexJavaTypeDeclaration);
     assertEquals("vector<unordered_map<string,vector<int>>>", complexCppTypeDeclaration);
-    assertEquals("dict<string,int[]>[]", complexPythonTypeDeclaration);
+    assertEquals("dict<str,int[]>[]", complexPythonTypeDeclaration);
     assertEquals("Hash<String,Fixnum[]>[]", complexRubyTypeDeclaration);
   }
 }

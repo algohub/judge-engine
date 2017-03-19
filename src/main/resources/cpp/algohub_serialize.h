@@ -7,6 +7,10 @@ inline std::string to_json(bool value) {
     return std::to_string(value);
 }
 
+inline std::string to_json(char value) {
+    return std::string(1, value);
+}
+
 inline std::string to_json(int value) {
     return std::to_string(value);
 }

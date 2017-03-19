@@ -40,6 +40,8 @@ def from_json(json_object, type_node, father_type=None):
             real_key = None
             if type_node.key_type.value == IntermediateType.BOOL:
                 real_key = bool(key)
+            elif type_node.key_type.value == IntermediateType.CHAR:
+                real_key = key
             elif type_node.key_type.value == IntermediateType.INT or \
                 type_node.key_type == IntermediateType.LONG:
                 real_key = int(key)

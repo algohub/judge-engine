@@ -37,6 +37,9 @@ public interface Serializer {
       case BOOL:
         result = BooleanNode.valueOf((Boolean) value);
         break;
+      case CHAR:
+        result = TextNode.valueOf(value.toString());
+        break;
       case STRING:
         result = TextNode.valueOf((String) value);
         break;
@@ -73,6 +76,13 @@ public interface Serializer {
           case BOOL: {
             final boolean[] array = (boolean[]) value;
             for (final boolean e : array) {
+              arrayNode.add(primitiveToJson(e, elementType));
+            }
+            break;
+          }
+          case CHAR: {
+            final char[] array = (char[]) value;
+            for (final char e : array) {
               arrayNode.add(primitiveToJson(e, elementType));
             }
             break;

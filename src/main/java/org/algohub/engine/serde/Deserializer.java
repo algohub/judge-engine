@@ -26,10 +26,15 @@ import java.util.Set;
  */
 @SuppressWarnings({"PMD.CommentRequired"}) public interface Deserializer {
   ImmutableMap<IntermediateType, Class> JAVA_CLASS_MAP =
-      ImmutableMap.<IntermediateType, Class>builder().put(IntermediateType.BOOL, boolean.class)
-          .put(IntermediateType.STRING, String.class).put(IntermediateType.DOUBLE, double.class)
-          .put(IntermediateType.INT, int.class).put(IntermediateType.LONG, long.class)
-          .put(IntermediateType.LIST, ArrayList.class).put(IntermediateType.SET, HashSet.class)
+      ImmutableMap.<IntermediateType, Class>builder()
+          .put(IntermediateType.BOOL, boolean.class)
+          .put(IntermediateType.CHAR, Character.class)
+          .put(IntermediateType.STRING, String.class)
+          .put(IntermediateType.DOUBLE, double.class)
+          .put(IntermediateType.INT, int.class)
+          .put(IntermediateType.LONG, long.class)
+          .put(IntermediateType.LIST, ArrayList.class)
+          .put(IntermediateType.SET, HashSet.class)
           .put(IntermediateType.MAP, HashMap.class)
           .put(IntermediateType.LINKED_LIST_NODE, LinkedListNode.class)
           .put(IntermediateType.BINARY_TREE_NODE, BinaryTreeNode.class).build();
@@ -37,26 +42,27 @@ import java.util.Set;
   /**
    * Get type of array element.
    */
-  static Class getArrayElementType(final TypeNode typeNode) {
+  static IntermediateType getArrayElementType(final TypeNode typeNode) {
     TypeNode node = typeNode;
     while (node.getValue() == IntermediateType.ARRAY) {
       node = node.getElementType().get();
     }
-    return JAVA_CLASS_MAP.get(node.getValue());
+    return node.getValue();
   }
 
   /**
    * Get all dimensions.
    */
-  static int[] getDimension(final ArrayNode arrayNode, final TypeNode typeNode) {
+  static int[] getDimensions(final ArrayNode arrayNode, final TypeNode typeNode) {
     final ArrayList<Integer> list = new ArrayList<>();
 
     JsonNode cur = arrayNode;
-    TypeNode currentType = typeNode;
-    while (cur.isArray() && currentType.getValue() == IntermediateType.ARRAY) {
+    TypeNode node = typeNode;
+    while (node.getValue() == IntermediateType.ARRAY) {
+      assert cur.isArray();
       list.add(cur.size());
       cur = cur.get(0);
-      currentType = currentType.getElementType().get();
+      node = node.getElementType().get();
     }
     return Ints.toArray(list);
   }
@@ -65,7 +71,7 @@ import java.util.Set;
   /**
    * Convert primitive values to JsonNode.
    */
-  static Object jsonToJavaPrimitiveNew(final TypeNode type, final JsonNode jsonNode) {
+  static Object jsonToJavaPrimitive(final TypeNode type, final JsonNode jsonNode) {
     final Object object;
     // for BinaryTreeNode
     if (jsonNode.isNull()) {
@@ -75,6 +81,9 @@ import java.util.Set;
     switch (type.getValue()) {
       case BOOL:
         object = jsonNode.asBoolean();
+        break;
+      case CHAR:
+        object = jsonNode.asText().charAt(0);
         break;
       case STRING:
         object = jsonNode.asText();
@@ -100,57 +109,38 @@ import java.util.Set;
   // Post order
   static Object fromJson(final TypeNode type, final JsonNode jsonNode) {
     if (!type.isContainer()) {
-      return jsonToJavaPrimitiveNew(type, jsonNode);
+      return jsonToJavaPrimitive(type, jsonNode);
     }
 
-    // Deal with two children first
     final Object javaNode;
     switch (type.getValue()) {
       case ARRAY: {
         final ArrayNode elements = (ArrayNode) jsonNode;
+        final int[] dimensions = getDimensions(elements, type);
+        final IntermediateType innerestType = getArrayElementType(type);
         final TypeNode elementType = type.getElementType().get();
-        switch (elementType.getValue()) {
-          case BOOL: {
-            final boolean[] javaArray = new boolean[elements.size()];
-            for (int i = 0; i < elements.size(); ++i) {
-              javaArray[i] = (Boolean) fromJson(elementType, elements.get(i));
-            }
-            javaNode = javaArray;
+
+        switch (innerestType) {
+          case BOOL:
+            javaNode = Array.newInstance(boolean.class, dimensions);
             break;
-          }
-          case INT: {
-            final int[] javaArray = new int[elements.size()];
-            for (int i = 0; i < elements.size(); ++i) {
-              javaArray[i] = (Integer) fromJson(elementType, elements.get(i));
-            }
-            javaNode = javaArray;
+          case CHAR:
+            javaNode = Array.newInstance(char.class, dimensions);
             break;
-          }
-          case LONG: {
-            final long[] javaArray = new long[elements.size()];
-            for (int i = 0; i < elements.size(); ++i) {
-              javaArray[i] = (Long) fromJson(elementType, elements.get(i));
-            }
-            javaNode = javaArray;
+          case INT:
+            javaNode = Array.newInstance(int.class, dimensions);
             break;
-          }
-          case DOUBLE: {
-            final double[] javaArray = new double[elements.size()];
-            for (int i = 0; i < elements.size(); ++i) {
-              javaArray[i] = (Double) fromJson(elementType, elements.get(i));
-            }
-            javaNode = javaArray;
+          case LONG:
+            javaNode = Array.newInstance(long.class, dimensions);
             break;
-          }
-          default: {
-            final Class innerestType = getArrayElementType(type);
-            final int[] dimension = getDimension(elements, type);
-            final Object javaArray = Array.newInstance(innerestType, dimension);
-            for (int i = 0; i < elements.size(); ++i) {
-              Array.set(javaArray, i, fromJson(elementType, elements.get(i)));
-            }
-            javaNode = javaArray;
-          }
+          case DOUBLE:
+            javaNode = Array.newInstance(double.class, dimensions);
+            break;
+          default: // LIST, LinkedListNode, SET, MAP, BinaryTreeNode
+            javaNode = Array.newInstance(JAVA_CLASS_MAP.get(innerestType), dimensions);
+        }
+        for (int i = 0; i < elements.size(); ++i) {
+          Array.set(javaNode, i, fromJson(elementType, elements.get(i)));
         }
         break;
       }
@@ -187,6 +177,9 @@ import java.util.Set;
           switch (type.getKeyType().get().getValue()) {
             case BOOL:
               key = Boolean.valueOf(keyStr);
+              break;
+            case CHAR:
+              key = Character.valueOf(keyStr.charAt(0));
               break;
             case STRING:
               key = keyStr;

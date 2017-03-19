@@ -2,6 +2,7 @@ from enum import Enum
 
 class IntermediateType(Enum):
     BOOL = 'bool'
+    CHAR = 'char'
     STRING = 'string'
     DOUBLE = 'double'
     INT = 'int'

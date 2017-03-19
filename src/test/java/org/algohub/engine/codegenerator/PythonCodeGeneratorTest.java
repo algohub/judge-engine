@@ -17,9 +17,9 @@ public class PythonCodeGeneratorTest {
         PythonCodeGenerator.generateEmptyFunction(FunctionGeneratorTest.TWO_SUM, 0);
     assertEquals(twoSumExpected, twoSumGenerated);
 
-    final String wordLadderExpected = "# @param {string} begin_word the begin word\n"
-        + "# @param {string} end_word the end word\n"
-        + "# @param {set<string>} dict the dictionary\n" + "# @return {int} The shortest length\n"
+    final String wordLadderExpected = "# @param {str} begin_word the begin word\n"
+        + "# @param {str} end_word the end word\n"
+        + "# @param {set<str>} dict the dictionary\n" + "# @return {int} The shortest length\n"
         + "def ladderLength(begin_word, end_word, dict):\n    # Write your code here\n";
     final String wordLadderGenerated =
         PythonCodeGenerator.generateEmptyFunction(FunctionGeneratorTest.WORD_LADDER, 0);
@@ -48,11 +48,11 @@ public class PythonCodeGeneratorTest {
 
     final String typeStr5 =
         FunctionGenerator.generateTypeDeclaration(JavaCodeGeneratorTest.ARRAY_LIST_SET_MAP, LanguageType.PYTHON);
-    assertEquals("set<dict<string,LinkedListNode<int>>>[][]", typeStr5);
+    assertEquals("set<dict<str,LinkedListNode<int>>>[][]", typeStr5);
 
 
     final String typeStr6 =
         FunctionGenerator.generateTypeDeclaration(JavaCodeGeneratorTest.BINARY_TREE_NODE_MAP, LanguageType.PYTHON);
-    assertEquals("BinaryTreeNode<dict<string,set<double[]>>>", typeStr6);
+    assertEquals("BinaryTreeNode<dict<str,set<float[]>>>", typeStr6);
   }
 }

@@ -4,6 +4,7 @@ require 'set'
 module Algohub
   module IntermediateType
     BOOL = 'bool'
+    CHAR = 'char'
     STRING = 'string'
     DOUBLE = 'double'
     INT = 'int'
@@ -381,6 +382,8 @@ module Algohub
                    key = case type_node.key_type.value
                            when IntermediateType::BOOL
                              k == 'true' ? true: false
+                           when IntermediateType::CHAR
+                             k[0]
                            when IntermediateType::INT, IntermediateType::LONG
                              k.to_i
                            when IntermediateType::DOUBLE

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum IntermediateType {
   BOOL("bool"),
+  CHAR("char"),
   STRING("string"),
   DOUBLE("double"),
   INT("int"),
