@@ -27,12 +27,7 @@ import java.util.Set;
 @SuppressWarnings({"PMD.CommentRequired"}) public interface Deserializer {
   ImmutableMap<IntermediateType, Class> JAVA_CLASS_MAP =
       ImmutableMap.<IntermediateType, Class>builder()
-          .put(IntermediateType.BOOL, boolean.class)
-          .put(IntermediateType.CHAR, Character.class)
           .put(IntermediateType.STRING, String.class)
-          .put(IntermediateType.DOUBLE, double.class)
-          .put(IntermediateType.INT, int.class)
-          .put(IntermediateType.LONG, long.class)
           .put(IntermediateType.LIST, ArrayList.class)
           .put(IntermediateType.SET, HashSet.class)
           .put(IntermediateType.MAP, HashMap.class)
