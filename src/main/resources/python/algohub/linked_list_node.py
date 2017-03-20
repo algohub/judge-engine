@@ -5,6 +5,18 @@ class LinkedListNode(CommonEqualityMixin):
         self.value = value
         self.next = next
 
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        p = self
+        q = other
+        while p is not None and q is not None:
+            if p.value != q.value:
+                return False
+            p = p.next
+            q = q.next
+        return p is None and q is None;
+
     def add(self, e):
         if self.value is None:
             self.value = e

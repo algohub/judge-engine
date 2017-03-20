@@ -29,8 +29,9 @@ public class JavaJudge implements JudgeInterface {
 
   private static final String PACKAGE_NAME = "org.algohub";
   private static final String IMPORTS =
-      "package " + PACKAGE_NAME + ";\n" + "import java.util.*;\n\n\n";
-  private static final int IMPORTS_LINES = 4;
+      "package " + PACKAGE_NAME + ";\n" + "import java.util.*;\n" +
+          "import org.algohub.engine.collection.*;\n\n\n";
+  private static final int IMPORTS_LINES = 5;
 
   private static JudgeResult judge(final Object clazz, final Method method,
       final InternalTestCase[] testCases, final Problem.TestCase[] testCasesJson,

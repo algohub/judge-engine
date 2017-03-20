@@ -84,6 +84,8 @@ template<typename T>
 inline bool
 operator==(const std::shared_ptr<T> &a, const std::shared_ptr<T> &b) noexcept {
     // use the real operator==() of type T
+    if(a == nullptr && b == nullptr) return true;
+    if(a == nullptr || b == nullptr) return false;
     return *a == *b;
 }
 

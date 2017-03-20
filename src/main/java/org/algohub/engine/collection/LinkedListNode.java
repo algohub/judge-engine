@@ -53,6 +53,8 @@ public class LinkedListNode<E> {
 
     LinkedListNode p = this;
     LinkedListNode q = other;
+    if(p.value == null && q.value == null) return true;
+    if(p.value == null || q.value == null) return false;
     while (p != null && q != null) {
       if (!p.value.equals(q.value)) {
         return false;
