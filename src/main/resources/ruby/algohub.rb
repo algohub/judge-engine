@@ -132,7 +132,7 @@ module Algohub
   end
 
   class LinkedListNode
-    attr_reader :value
+    attr_accessor :value
     attr_accessor :next
 
     def initialize(value = nil, _next = nil)

@@ -7,8 +7,8 @@ import org.algohub.engine.type.LanguageType;
 
 
 public class RubyJudge implements JudgeInterface {
-  private static final String IMPORTS = "require 'set'\n\n\n";
-  private static final int IMPORTS_LINES = 3;
+  private static final String IMPORTS = "require 'set'\nrequire 'algohub'\nLinkedListNode = Algohub::LinkedListNode\nBinaryTreeNode = Algohub::BinaryTreeNode\n\n\n";
+  private static final int IMPORTS_LINES = 6;
 
   /**
    * @{inhericDoc}.
