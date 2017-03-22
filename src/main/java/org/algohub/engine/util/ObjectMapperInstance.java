@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 public final class ObjectMapperInstance {
   public static final ObjectMapper INSTANCE = new ObjectMapper();
+  private ObjectMapperInstance() {}
 
   static {
     INSTANCE.registerModule(new Jdk8Module());

@@ -67,11 +67,10 @@ import java.util.Set;
    * Convert primitive values to JsonNode.
    */
   static Object jsonToJavaPrimitive(final TypeNode type, final JsonNode jsonNode) {
-    final Object object;
-    // for BinaryTreeNode
     if (jsonNode.isNull()) {
       return null;
     }
+    final Object object;
 
     switch (type.getValue()) {
       case BOOL:
@@ -199,24 +198,28 @@ import java.util.Set;
       }
       case LINKED_LIST_NODE: {
         final ArrayNode elements = (ArrayNode) jsonNode;
-        final LinkedListNode javaLinkedList = new LinkedListNode<>();
-
-        for (final JsonNode e : elements) {
-          javaLinkedList.add(fromJson(type.getElementType().get(), e));
+        if(elements.size() > 0) {
+          final LinkedListNode javaLinkedList = new LinkedListNode<>();
+          for (final JsonNode e : elements) {
+            javaLinkedList.add(fromJson(type.getElementType().get(), e));
+          }
+          javaNode = javaLinkedList;
+        } else {
+          javaNode = null;
         }
-
-        javaNode = javaLinkedList;
         break;
       }
       case BINARY_TREE_NODE: {
         final ArrayNode elements = (ArrayNode) jsonNode;
-        final BinaryTreeNode javaBinaryTree = new BinaryTreeNode<>();
-
-        for (final JsonNode e : elements) {
-          javaBinaryTree.add(fromJson(type.getElementType().get(), e));
+        if(elements.size() > 0) {
+          final BinaryTreeNode javaBinaryTree = new BinaryTreeNode<>();
+          for (final JsonNode e : elements) {
+            javaBinaryTree.add(fromJson(type.getElementType().get(), e));
+          }
+          javaNode = javaBinaryTree;
+        } else {
+          javaNode = null;
         }
-
-        javaNode = javaBinaryTree;
         break;
       }
       default:
