@@ -33,7 +33,7 @@ The following commands should be available in `$PATH`:
 
 * `java`
 * `javac`
-* `g++`*
+* `g++`
 * `python3`
 * `ruby`
 
