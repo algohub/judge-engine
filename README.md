@@ -51,9 +51,14 @@ Algohub Judge Engine relies on the [rapidjson](ihttps://github.com/miloyip/rapid
 
 #### Pre-defined C++ Header Files
 
+First, download the languages support files,
+
+    git clone https://github.com/algohub/judge-engine-languages-support.git
+    cd judge-engine-languages-support/
+
 Algohub Judge Engine has some pre-defined C++ header files which are needed during compilation.
 
-    sudo cp src/main/resources/cpp/* /usr/local/include/
+    sudo cp -r judge-engine-cpp-support/include/algohub/ /usr/local/include/
 
 
 #### Pre-defined Python Module

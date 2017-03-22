@@ -22,8 +22,8 @@ public final class CppCodeGenerator {
    */
   public static String generateMain(final Function function, boolean fromFile) {
     final StringBuilder result = new StringBuilder();
-    result.append("#include <algohub_serialize.h>\n#include <algohub_deserialize.h>\n#include "
-        + "<algohub_judge_result.h>\n#include \"solution.cpp\"\n" + "\n" + "\n");
+    result.append("#include <algohub/serialize.h>\n#include <algohub/deserialize.h>\n#include "
+        + "<algohub/judge_result.h>\nusing namespace std;\n#include \"solution.cpp\"\n\n\n");
 
     Indentation.append(result, "int main(int argc, char* argv[]) {\n", 0);
     Indentation.append(result, "signal(SIGSEGV, sigsegv_handler);\n", 1);
@@ -36,6 +36,7 @@ public final class CppCodeGenerator {
       Indentation.append(result, "getline(cin, testcases_text);\n", 1);
     }
     Indentation.append(result, "rapidjson::Document testcases_json;\n", 1);
+    Indentation.append(result, "rapidjson::Document::AllocatorType& allocator = testcases_json.GetAllocator();\n", 1);
     Indentation.append(result, "testcases_json.Parse(testcases_text.c_str());\n", 1);
     Indentation.append(result, "assert (testcases_json.IsArray());\n\n", 1);
 
@@ -76,6 +77,9 @@ public final class CppCodeGenerator {
     Indentation.append(result, "if (expected_output == result) {\n", 2);
     Indentation.append(result, "judge_result.testcase_passed_count += 1;\n", 3);
     Indentation.append(result, "} else {\n", 2);
+    Indentation.append(result, "judge_result.input = rapidjson::Value(input, allocator).Move();\n", 3);
+    Indentation.append(result, "judge_result.expected_output = testcases_json[i][\"output\"];\n", 3);
+    Indentation.append(result, "judge_result.output = to_json(result, allocator);\n", 3);
     Indentation.append(result, "break;\n", 3);
     Indentation.append(result, "}\n", 2);
     Indentation.append(result, "}\n\n", 1);
@@ -87,7 +91,7 @@ public final class CppCodeGenerator {
     Indentation.append(result, "judge_result.status_code = StatusCode::ACCEPTED;\n", 2);
     Indentation.append(result, "}\n\n", 1);
 
-    Indentation.append(result, "std::cout << std::endl << judge_result.to_json();\n", 1);
+    Indentation.append(result, "std::cout << std::endl << judge_result.to_string();\n", 1);
     Indentation.append(result, "return 0;\n}\n", 1);
     return result.toString();
   }
@@ -100,7 +104,7 @@ public final class CppCodeGenerator {
    * @param type the type
    * @return type declaration
    */
-   static String generateTypeDeclaration(final TypeNode type) {
+  static String generateTypeDeclaration(final TypeNode type) {
     if (!type.isContainer()) {
       return TypeMap.TYPE_MAP.get(LanguageType.CPLUSPLUS).get(type.getValue());
     }

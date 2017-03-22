@@ -35,13 +35,13 @@ public class CppCodeGeneratorTest {
     {
       final StringBuilder sb = new StringBuilder();
       final String typeDeclaration = CppCodeGenerator.generateTypeDeclaration(type);
-      Indentation
-          .append(sb, typeDeclaration + " serde(const " + typeDeclaration + " &input) {\n", 0);
-      Indentation.append(sb, "const string serialized = to_json(input);\n", 1);
+      Indentation.append(sb, typeDeclaration +
+          " serde(const " + typeDeclaration + " &input) {\n", 0);
       Indentation.append(sb, "rapidjson::Document doc;\n", 1);
-      Indentation.append(sb, "doc.Parse(serialized.c_str());\n", 1);
+      Indentation.append(sb,
+          "const rapidjson::Value serialized = to_json(input, doc.GetAllocator());\n", 1);
       Indentation.append(sb, typeDeclaration + " deserialized;\n", 1);
-      Indentation.append(sb, "from_json(doc, deserialized);\n", 1);
+      Indentation.append(sb, "from_json(serialized, deserialized);\n", 1);
       Indentation.append(sb, "return std::move(deserialized);\n", 1);
       Indentation.append(sb, "}\n", 0);
       solution = sb.toString();
@@ -119,13 +119,14 @@ public class CppCodeGeneratorTest {
     testSerde("list<int>", arrayJson);
     testSerde("set<int>", arrayJson);
     testSerde("LinkedListNode<int>", arrayJson);
-    testSerde("map<string,int>", "{\"hello\":1, \"world\":2}");
+    testSerde("map<string,int>", "{\"\\\"hello\\\"\":1, \"\\\"world\\\"\":2}");
     testSerde("map<int,double>", "{\"1\":1.0, \"2\":2.0}");
     testSerde("BinaryTreeNode<int>", "[2,1,10,null,null,5]");
     testSerde("array<array<int>>", arrayArrayJson);
     testSerde("LinkedListNode<LinkedListNode<int>>", arrayArrayJson);
     testSerde("array<LinkedListNode<int>>", arrayArrayJson);
     testSerde("set<LinkedListNode<int>>", arrayArrayJson);
-    testSerde("map<string, LinkedListNode<int>>", "{\"hello\":[4,5,6],\"world\":[1,2,3]}");
+    testSerde("map<string, LinkedListNode<int>>",
+        "{\"\\\"hello\\\"\":[4,5,6],\"\\\"world\\\"\":[1,2,3]}");
   }
 }
