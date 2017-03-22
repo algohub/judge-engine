@@ -24,6 +24,11 @@ public class DeserializerTest {
   @Test public void deserializePrimitiveTest() {
     assertEquals(Boolean.TRUE,
         Deserializer.fromJson(TypeNode.fromString("bool"), BooleanNode.TRUE));
+    assertEquals(Boolean.FALSE,
+        Deserializer.fromJson(TypeNode.fromString("bool"), BooleanNode.FALSE));
+
+    assertEquals('a',
+        Deserializer.fromJson(TypeNode.fromString("char"), TextNode.valueOf("a")));
 
     assertEquals(Integer.valueOf(123),
         Deserializer.fromJson(TypeNode.fromString("int"), IntNode.valueOf(123)));

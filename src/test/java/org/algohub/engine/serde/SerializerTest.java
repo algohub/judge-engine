@@ -19,6 +19,10 @@ public class SerializerTest {
 
   @Test public void primitiveToJsonTest() {
     assertEquals(BooleanNode.TRUE, Serializer.toJson(true, TypeNode.fromString("bool")));
+    assertEquals(BooleanNode.FALSE, Serializer.toJson(false, TypeNode.fromString("bool")));
+
+    assertEquals(TextNode.valueOf("a"),
+        Serializer.toJson('a', TypeNode.fromString("char")));
 
     assertEquals(IntNode.valueOf(123), Serializer.toJson(123, TypeNode.fromString("int")));
 
