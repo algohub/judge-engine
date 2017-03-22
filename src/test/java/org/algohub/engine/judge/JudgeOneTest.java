@@ -10,11 +10,12 @@ import org.algohub.engine.util.ObjectMapperInstance;
 import org.junit.Test;
 
 
+// for debug only
 public class JudgeOneTest {
 
   @Test
   public void judgeOne() {
-    judgeOne("permutation-sequence", LanguageType.PYTHON);
+    judgeOne("partition-list", LanguageType.JAVA);
   }
 
   private static void judgeOne(final String problemId, LanguageType languageType) {
