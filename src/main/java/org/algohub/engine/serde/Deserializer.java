@@ -198,15 +198,13 @@ import java.util.Set;
       }
       case LINKED_LIST_NODE: {
         final ArrayNode elements = (ArrayNode) jsonNode;
-        if(elements.size() > 0) {
-          final LinkedListNode javaLinkedList = new LinkedListNode<>();
-          for (final JsonNode e : elements) {
-            javaLinkedList.add(fromJson(type.getElementType().get(), e));
-          }
-          javaNode = javaLinkedList;
-        } else {
-          javaNode = null;
+        final LinkedListNode dummy = new LinkedListNode<>(null);
+        LinkedListNode tail = dummy;
+        for (final JsonNode e : elements) {
+          tail.next = new LinkedListNode<>(fromJson(type.getElementType().get(), e));
+          tail = tail.next;
         }
+        javaNode = dummy.next;
         break;
       }
       case BINARY_TREE_NODE: {
