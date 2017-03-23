@@ -108,7 +108,6 @@ public interface JudgeInterface {
               null, 0, 0, time, 0);
         }
       }
-      JudgeInterface.removeRecursive(cwd.toPath());
       return result;
     } catch (IOException | InterruptedException ex) {
       return new JudgeResult(StatusCode.RUNTIME_ERROR,
@@ -178,8 +177,8 @@ public interface JudgeInterface {
    */
   static JudgeResult judge(final Function function, final Problem.TestCase[] testCases,
       final String userCode, final LanguageType language, UnaryOperator<String> createFriendlyMessage) {
+    final File tmpDir = Files.createTempDir();
     try {
-      final File tmpDir = Files.createTempDir();
       final String testcasesText = ObjectMapperInstance.INSTANCE.writeValueAsString(testCases);
       final boolean fromFile = testcasesText.length() > N_TTY_BUF_SIZE;
 
@@ -261,6 +260,12 @@ public interface JudgeInterface {
       return new JudgeResult(StatusCode.RUNTIME_ERROR,
           ex.getClass().getName() + ", " + ex.getMessage(), null, null, null, 0, testCases.length,
           0, 0);
+    } finally {
+      try {
+        JudgeInterface.removeRecursive(tmpDir.toPath());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 }
