@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static org.algohub.engine.codegenerator.DataTypes.*;
 import static org.algohub.engine.serde.SharedData.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -44,56 +45,45 @@ public class DeserializerTest {
   }
 
   @Test public void deserializeCollectionTest() {
-    assertArrayEquals(arrayInt,
-        (int[]) Deserializer.fromJson(TypeNode.fromString("array<int>"), arrayIntJson));
-    assertEquals(listInt,
-        Deserializer.fromJson(TypeNode.fromString("list<int>"), arrayIntJson));
-    assertEquals(setInt,
-        Deserializer.fromJson(TypeNode.fromString("set<int>"), arrayIntJson));
-    assertEquals(linkedListInt,
-        Deserializer.fromJson(TypeNode.fromString("LinkedListNode<int>"), arrayIntJson));
+    assertArrayEquals(arrayInt, (int[]) Deserializer.fromJson(ARRAY_INT, arrayIntJson));
+    assertEquals(listInt, Deserializer.fromJson(LIST_INT, arrayIntJson));
+    assertEquals(setInt, Deserializer.fromJson(SET_INT, arrayIntJson));
+    assertEquals(linkedListInt, Deserializer.fromJson(LINKED_LIST_INT, arrayIntJson));
 
     // empty linked list
-    assertEquals(null,
-        Deserializer.fromJson(TypeNode.fromString("LinkedListNode<int>"), emptyArrayJson));
+    assertEquals(null, Deserializer.fromJson(LINKED_LIST_INT, emptyArrayJson));
 
-    assertEquals(mapStringInt,
-        Deserializer.fromJson(TypeNode.fromString("map<string, int>"), mapStringIntJson));
-    assertEquals(mapIntDouble,
-        Deserializer.fromJson(TypeNode.fromString("map<int, double>"), mapIntDoubleJson));
+    assertEquals(mapStringInt, Deserializer.fromJson(MAP_STRING_INT, mapStringIntJson));
+    assertEquals(mapIntDouble, Deserializer.fromJson(MAP_INT_DOUBLE, mapIntDoubleJson));
 
     // empty binary tree
-    assertEquals(null,
-        Deserializer.fromJson(TypeNode.fromString("BinaryTreeNode<int>"), emptyArrayJson));
-    assertEquals(binaryTree,
-        Deserializer.fromJson(TypeNode.fromString("BinaryTreeNode<int>"), binaryTreeJson));
+    assertEquals(null, Deserializer.fromJson(BINARY_TREE_INT, emptyArrayJson));
+    assertEquals(binaryTree, Deserializer.fromJson(BINARY_TREE_INT, binaryTreeJson));
 
     final int[][] arrayArrayIntActual = (int[][]) Deserializer.fromJson(
-        TypeNode.fromString("array<array<int>>"), arrayArrayIntJson);
+        ARRAY_ARRAY_INT, arrayArrayIntJson);
     assertArrayEquals(arrayArrayInt[0], arrayArrayIntActual[0]);
     assertArrayEquals(arrayArrayInt[1], arrayArrayIntActual[1]);
 
     final ArrayList<ArrayList<Integer>> listListIntActual =
-        (ArrayList<ArrayList<Integer>>) Deserializer.fromJson(
-            TypeNode.fromString("list<list<int>>"), arrayArrayIntJson);
+        (ArrayList<ArrayList<Integer>>) Deserializer.fromJson(LIST_LIST_INT, arrayArrayIntJson);
     assertEquals(listListInt, listListIntActual);
 
     final LinkedListNode<LinkedListNode<Integer>> linkedListLinkedListIntActual =
-        (LinkedListNode) Deserializer.fromJson(
-            TypeNode.fromString("LinkedListNode<linkedListNode<int>>"), arrayArrayIntJson);
+        (LinkedListNode) Deserializer.fromJson(LINKED_LIST_LINKED_LIST_INT, arrayArrayIntJson);
     assertEquals(linkedListLinkedListInt, linkedListLinkedListIntActual);
 
     final LinkedListNode<Integer>[] arrayLinkedListIntActual = (LinkedListNode[]) Deserializer
-        .fromJson(TypeNode.fromString("array<linkedListNode<int>>"), arrayArrayIntJson);
+        .fromJson(ARRAY_LINKED_LIST_INT, arrayArrayIntJson);
     assertArrayEquals(arrayLinkedListInt, arrayLinkedListIntActual);
 
     final HashSet<LinkedListNode<Integer>> setLinkedListIntActual = (HashSet) Deserializer.fromJson(
-        TypeNode.fromString("set<LinkedListNode<int>>"), arrayArrayIntJson);
+        SET_LINKED_LIST_INT, arrayArrayIntJson);
     assertEquals(setLinkedListInt, setLinkedListIntActual);
 
     final HashMap<String, LinkedListNode<Integer>> mapStringLinkedListIntActual =
         (HashMap<String, LinkedListNode<Integer>>) Deserializer.fromJson(
-            TypeNode.fromString("map<string, LinkedListNode<int>>"), mapStringLinkedListIntJson);
+            MAP_STRING_LINKED_LIST_INT, mapStringLinkedListIntJson);
     assertEquals(mapStringLinkedListInt, mapStringLinkedListIntActual);
   }
 }

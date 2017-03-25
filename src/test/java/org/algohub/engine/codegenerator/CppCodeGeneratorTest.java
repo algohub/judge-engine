@@ -7,19 +7,21 @@ import org.algohub.engine.judge.CppJudge;
 import org.algohub.engine.bo.StatusCode;
 import org.algohub.engine.pojo.Function;
 import org.algohub.engine.pojo.Problem;
-import org.algohub.engine.type.LanguageType;
 import org.algohub.engine.pojo.JudgeResult;
 import org.algohub.engine.type.TypeNode;
+import org.algohub.engine.util.ObjectMapperInstance;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.algohub.engine.codegenerator.DataTypes.*;
+import static org.algohub.engine.codegenerator.DataTypes.BINARY_TREE_MAP_STRING_INT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @SuppressWarnings({"PMD.CommentRequired"})
 public class CppCodeGeneratorTest {
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+  private static final ObjectMapper OBJECT_MAPPER = ObjectMapperInstance.INSTANCE;
 
   private static void testSerde(final String typeStr, final String oneTestCase) {
     final TypeNode type = TypeNode.fromString(typeStr);
@@ -59,39 +61,95 @@ public class CppCodeGeneratorTest {
   }
 
   @Test public void generateTypeDeclarationTest() {
-    final String typeStr1 = FunctionGenerator
-        .generateTypeDeclaration(JavaCodeGeneratorTest.ARRAY_INT, LanguageType.CPLUSPLUS);
-    assertEquals("vector<int>", typeStr1);
+    assertEquals("vector<int>", CppCodeGenerator.generateTypeDeclaration(ARRAY_INT));
+    assertEquals("vector<int>", CppCodeGenerator.generateTypeDeclaration(LIST_INT));
+    assertEquals("unordered_set<int>", CppCodeGenerator.generateTypeDeclaration(SET_INT));
+    assertEquals("shared_ptr<LinkedListNode<int>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_INT));
 
+    assertEquals("unordered_map<string, int>",
+        CppCodeGenerator.generateTypeDeclaration(MAP_STRING_INT));
+    assertEquals("unordered_map<int, double>",
+        CppCodeGenerator.generateTypeDeclaration(MAP_INT_DOUBLE));
 
-    final String typeStr2 = FunctionGenerator
-        .generateTypeDeclaration(JavaCodeGeneratorTest.LIST_INT, LanguageType.CPLUSPLUS);
-    assertEquals("vector<int>", typeStr2);
+    assertEquals("shared_ptr<BinaryTreeNode<int>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_INT));
 
-    final String typeStr3 = FunctionGenerator
-        .generateTypeDeclaration(JavaCodeGeneratorTest.LIST_ARRAY_INT, LanguageType.CPLUSPLUS);
-    assertEquals("vector<vector<int>>", typeStr3);
+    assertEquals("vector<vector<int>>", CppCodeGenerator.generateTypeDeclaration(
+        ARRAY_ARRAY_INT));
+    assertEquals("vector<vector<int>>", CppCodeGenerator.generateTypeDeclaration(
+        ARRAY_LIST_INT));
+    assertEquals("vector<unordered_set<int>>", CppCodeGenerator.generateTypeDeclaration(
+        ARRAY_SET_INT));
+    assertEquals("vector<shared_ptr<LinkedListNode<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(ARRAY_LINKED_LIST_INT));
+    assertEquals("vector<unordered_map<string, int>>",
+        CppCodeGenerator.generateTypeDeclaration(ARRAY_MAP_STRING_INT));
+    assertEquals("vector<unordered_map<int, double>>",
+        CppCodeGenerator.generateTypeDeclaration(ARRAY_MAP_INT_DOUBLE));
 
+    assertEquals("vector<vector<int>>", CppCodeGenerator.generateTypeDeclaration(
+        LIST_ARRAY_INT));
+    assertEquals("vector<vector<int>>", CppCodeGenerator.generateTypeDeclaration(
+        LIST_LIST_INT));
+    assertEquals("vector<unordered_set<int>>", CppCodeGenerator.generateTypeDeclaration(
+        LIST_SET_INT));
+    assertEquals("vector<shared_ptr<LinkedListNode<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(LIST_LINKED_LIST_INT));
+    assertEquals("vector<unordered_map<string, int>>",
+        CppCodeGenerator.generateTypeDeclaration(LIST_MAP_STRING_INT));
+    assertEquals("vector<unordered_map<int, double>>",
+        CppCodeGenerator.generateTypeDeclaration(LIST_MAP_INT_DOUBLE));
 
-    final String typeStr4 = FunctionGenerator
-        .generateTypeDeclaration(JavaCodeGeneratorTest.LIST_LIST_INT, LanguageType.CPLUSPLUS);
-    assertEquals("vector<vector<int>>", typeStr4);
+    assertEquals("unordered_set<vector<int>>", CppCodeGenerator.generateTypeDeclaration(
+        SET_ARRAY_INT));
+    assertEquals("unordered_set<vector<int>>", CppCodeGenerator.generateTypeDeclaration(
+        SET_LIST_INT));
+    assertEquals("unordered_set<unordered_set<int>>",
+        CppCodeGenerator.generateTypeDeclaration(SET_SET_INT));
+    assertEquals("unordered_set<shared_ptr<LinkedListNode<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(SET_LINKED_LIST_INT));
+    assertEquals("unordered_set<unordered_map<string, int>>",
+        CppCodeGenerator.generateTypeDeclaration(SET_MAP_STRING_INT));
+    assertEquals("unordered_set<unordered_map<int, double>>",
+        CppCodeGenerator.generateTypeDeclaration(SET_MAP_INT_DOUBLE));
 
+    assertEquals("shared_ptr<LinkedListNode<vector<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_ARRAY_INT));
+    assertEquals("shared_ptr<LinkedListNode<vector<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_LIST_INT));
+    assertEquals("shared_ptr<LinkedListNode<unordered_set<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_SET_INT));
+    assertEquals("shared_ptr<LinkedListNode<shared_ptr<LinkedListNode<int>>>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_LINKED_LIST_INT));
+    assertEquals("shared_ptr<LinkedListNode<unordered_map<string, int>>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_MAP_STRING_INT));
+    assertEquals("shared_ptr<LinkedListNode<unordered_map<int, double>>>",
+        CppCodeGenerator.generateTypeDeclaration(LINKED_LIST_MAP_INT_DOUBLE));
 
-    final String typeStr5 = FunctionGenerator
-        .generateTypeDeclaration(JavaCodeGeneratorTest.ARRAY_LIST_SET_MAP, LanguageType.CPLUSPLUS);
-    assertEquals("vector<vector<unordered_set<unordered_map<string,LinkedListNode<int>>>>>",
-        typeStr5);
+    assertEquals("shared_ptr<BinaryTreeNode<vector<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_ARRAY_INT));
+    assertEquals("shared_ptr<BinaryTreeNode<vector<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_LIST_INT));
+    assertEquals("shared_ptr<BinaryTreeNode<unordered_set<int>>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_SET_INT));
+    assertEquals("shared_ptr<BinaryTreeNode<shared_ptr<LinkedListNode<int>>>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_LINKED_LIST_INT));
+    assertEquals("shared_ptr<BinaryTreeNode<unordered_map<string, int>>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_MAP_STRING_INT));
+    assertEquals("shared_ptr<BinaryTreeNode<unordered_map<int, double>>>",
+        CppCodeGenerator.generateTypeDeclaration(BINARY_TREE_MAP_INT_DOUBLE));
 
+    assertEquals("vector<vector<unordered_set<unordered_map<string, shared_ptr<LinkedListNode<int>>>>>>",
+        CppCodeGenerator.generateTypeDeclaration(ARRAY_LIST_SET_MAP_STRING_LINKED_LIST_INT));
 
-    final String typeStr6 = FunctionGenerator
-        .generateTypeDeclaration(JavaCodeGeneratorTest.BINARY_TREE_NODE_MAP, LanguageType.CPLUSPLUS);
-    assertEquals("BinaryTreeNode<unordered_map<string,unordered_set<vector<double>>>>", typeStr6);
+    assertEquals("shared_ptr<BinaryTreeNode<unordered_map<string, unordered_set<vector<double>>>>>",
+        CppCodeGenerator
+            .generateTypeDeclaration(BINARY_TREE_MAP_STRING_SET_LIST_DOUBLE));
   }
 
-  @Test public void generateEmptyFunctionTest() {
-    final String twoSumGenerated =
-        CppCodeGenerator.generateEmptyFunction(FunctionGeneratorTest.TWO_SUM);
+  @Test public void generateCppFunctionTest() {
+    final String twoSumGenerated = CppCodeGenerator.generateEmptyFunction(TWO_SUM);
     final String twoSumExpected = "/**\n" + " * @param numbers An array of Integers\n"
         + " * @param target target = numbers[index1] + numbers[index2]\n"
         + " * @return [index1 + 1, index2 + 1] (index1 < index2)\n" + " */\n"
@@ -100,8 +158,7 @@ public class CppCodeGeneratorTest {
     assertEquals(twoSumExpected, twoSumGenerated);
 
 
-    final String wordLadderGenerated =
-        CppCodeGenerator.generateEmptyFunction(FunctionGeneratorTest.WORD_LADDER);
+    final String wordLadderGenerated = CppCodeGenerator.generateEmptyFunction(WORD_LADDER);
     final String wordLadderExpected =
         "/**\n" + " * @param begin_word the begin word\n" + " * @param end_word the end word\n"
             + " * @param dict the dictionary\n" + " * @return The shortest length\n" + " */\n"

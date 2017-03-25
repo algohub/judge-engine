@@ -45,7 +45,7 @@ public final class JavaCodeGenerator {
       final String containerTypeStr = TypeMap.JAVA_TYPE_MAP.get(type.getValue());
       if (type.getKeyType().isPresent()) {
         return containerTypeStr + "<" + generateTypeDeclaration(type.getKeyType().get(),
-            type.getValue()) + "," + generateTypeDeclaration(type.getElementType().get(),
+            type.getValue()) + ", " + generateTypeDeclaration(type.getElementType().get(),
             type.getValue()) + ">";
       } else {
         return containerTypeStr + "<" + generateTypeDeclaration(type.getElementType().get(),

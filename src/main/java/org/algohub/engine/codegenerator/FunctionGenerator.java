@@ -7,6 +7,7 @@ import org.algohub.engine.type.TypeNode;
 
 import static org.algohub.engine.codegenerator.Indentation.append;
 
+
 /**
  * Generate function declaration for display.
  */
@@ -47,26 +48,13 @@ public class FunctionGenerator {
    */
   public static String generateTypeDeclaration(final TypeNode type,
       final LanguageType languageType) {
-    if (!type.isContainer()) {
-      return TypeMap.TYPE_MAP.get(languageType).get(type.getValue());
-    }
-    final boolean notCppArray =
-        type.getValue() == IntermediateType.ARRAY && languageType != LanguageType.CPLUSPLUS;
-    final boolean isPythonRubyArrayList =
-        (type.getValue() == IntermediateType.ARRAY || type.getValue() == IntermediateType.LIST) && (
-            languageType == LanguageType.PYTHON || languageType == LanguageType.RUBY);
-    if (notCppArray || isPythonRubyArrayList) {
-      return generateTypeDeclaration(type.getElementType().get(), languageType) + "[]";
-    } else {
-      final String containerTypeStr = TypeMap.TYPE_MAP.get(languageType).get(type.getValue());
-      if (type.getKeyType().isPresent()) {
-        return containerTypeStr + "<" + generateTypeDeclaration(type.getKeyType().get(),
-            languageType) + "," + generateTypeDeclaration(type.getElementType().get(), languageType)
-            + ">";
-      } else {
-        return containerTypeStr + "<" + generateTypeDeclaration(type.getElementType().get(),
-            languageType) + ">";
-      }
+    switch (languageType) {
+      case JAVA:
+        return JavaCodeGenerator.generateTypeDeclaration(type);
+      case CPLUSPLUS:
+        return CppCodeGenerator.generateTypeDeclaration(type);
+      default:
+        throw new IllegalArgumentException("Unsupported language: " + languageType);
     }
   }
 

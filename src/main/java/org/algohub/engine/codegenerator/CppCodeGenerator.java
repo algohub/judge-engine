@@ -112,17 +112,12 @@ public final class CppCodeGenerator {
     final String containerTypeStr =
         TypeMap.TYPE_MAP.get(LanguageType.CPLUSPLUS).get(type.getValue());
     if (type.getKeyType().isPresent()) {
-      return containerTypeStr + "<" + generateTypeDeclaration(type.getKeyType().get()) + ","
+      return containerTypeStr + "<" + generateTypeDeclaration(type.getKeyType().get()) + ", "
           + generateTypeDeclaration(type.getElementType().get()) + ">";
     } else {
       final String typeDeclaration =
           containerTypeStr + "<" + generateTypeDeclaration(type.getElementType().get()) + ">";
-      if (type.getValue() == IntermediateType.BINARY_TREE_NODE
-          || type.getValue() == IntermediateType.LINKED_LIST_NODE) {
-        return "std::shared_ptr<" + typeDeclaration + ">";
-      } else {
-        return typeDeclaration;
-      }
+      return addSharedPtr(type, typeDeclaration);
     }
   }
 
@@ -133,5 +128,14 @@ public final class CppCodeGenerator {
    */
   public static String generateEmptyFunction(final Function function) {
     return FunctionGenerator.generateFunction(function, LanguageType.CPLUSPLUS, 0);
+  }
+
+  private static String addSharedPtr(TypeNode type, String elemType) {
+    if (type.getValue() == IntermediateType.BINARY_TREE_NODE
+        || type.getValue() == IntermediateType.LINKED_LIST_NODE) {
+      return "shared_ptr<" + elemType + ">";
+    } else {
+      return elemType;
+    }
   }
 }

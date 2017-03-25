@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import org.algohub.engine.type.TypeNode;
 import org.junit.Test;
 
+import static org.algohub.engine.codegenerator.DataTypes.*;
 import static org.algohub.engine.serde.SharedData.*;
 import static org.junit.Assert.assertEquals;
 
@@ -36,42 +37,33 @@ public class SerializerTest {
   }
 
   @Test public void collectionToJsonTest() {
-    assertEquals(arrayIntJson, Serializer.toJson(arrayInt, TypeNode.fromString("array<int>")));
-    assertEquals(arrayIntJson, Serializer.toJson(listInt, TypeNode.fromString("list<int>")));
-    assertEquals(arrayIntJson, Serializer.toJson(setInt, TypeNode.fromString("set<int>")));
-    assertEquals(arrayIntJson,
-        Serializer.toJson(linkedListInt, TypeNode.fromString("LinkedListNode<int>")));
-
+    assertEquals(arrayIntJson, Serializer.toJson(arrayInt, ARRAY_INT));
+    assertEquals(arrayIntJson, Serializer.toJson(listInt, LIST_INT));
+    assertEquals(arrayIntJson, Serializer.toJson(setInt, SET_INT));
+    assertEquals(arrayIntJson, Serializer.toJson(linkedListInt, LINKED_LIST_INT));
     // empty linked list
-    assertEquals(emptyArrayJson,
-        Serializer.toJson(null, TypeNode.fromString("LinkedListNode<int>")));
+    assertEquals(emptyArrayJson, Serializer.toJson(null, LINKED_LIST_INT));
 
     final ObjectNode mapStringIntActual =
-        (ObjectNode) Serializer.toJson(mapStringInt, TypeNode.fromString("map<string, int>"));
+        (ObjectNode) Serializer.toJson(mapStringInt, MAP_STRING_INT);
     assertEquals(mapStringIntJson, mapStringIntActual);
     final ObjectNode mapIntDoubleActual =
-        (ObjectNode) Serializer.toJson(mapIntDouble, TypeNode.fromString("map<int,double>"));
+        (ObjectNode) Serializer.toJson(mapIntDouble, MAP_INT_DOUBLE);
     assertEquals(mapIntDoubleJson, mapIntDoubleActual);
 
     // empty binary tree
-    assertEquals(emptyArrayJson,
-        Serializer.toJson(null, TypeNode.fromString("BinaryTreeNode<int>")));
-    assertEquals(binaryTreeJson,
-        Serializer.toJson(binaryTree, TypeNode.fromString("BinaryTreeNode<int>")));
+    assertEquals(emptyArrayJson, Serializer.toJson(null, BINARY_TREE_INT));
+    assertEquals(binaryTreeJson, Serializer.toJson(binaryTree, BINARY_TREE_INT));
 
-    assertEquals(arrayArrayIntJson,
-        Serializer.toJson(arrayArrayInt, TypeNode.fromString("array<array<int>>")));
-    assertEquals(arrayArrayIntJson,
-        Serializer.toJson(listListInt, TypeNode.fromString("list<list<int>>")));
+    assertEquals(arrayArrayIntJson, Serializer.toJson(arrayArrayInt, ARRAY_ARRAY_INT));
+    assertEquals(arrayArrayIntJson, Serializer.toJson(listListInt, LIST_LIST_INT));
     assertEquals(arrayArrayIntJson, Serializer.toJson(linkedListLinkedListInt,
-        TypeNode.fromString("LinkedListNode<LinkedListNode<int>>")));
-    assertEquals(arrayArrayIntJson, Serializer.toJson(arrayLinkedListInt,
-        TypeNode.fromString("array<LinkedListNode<int>>")));
-    assertEquals(arrayArrayIntJson, Serializer.toJson(setLinkedListInt,
-        TypeNode.fromString("set<LinkedListNode<int>>")));
+        LINKED_LIST_LINKED_LIST_INT));
+    assertEquals(arrayArrayIntJson, Serializer.toJson(arrayLinkedListInt, ARRAY_LINKED_LIST_INT));
+    assertEquals(arrayArrayIntJson, Serializer.toJson(setLinkedListInt, SET_LINKED_LIST_INT));
 
-    final ObjectNode mapStringLinkedListJsonActual = (ObjectNode) Serializer
-        .toJson(mapStringLinkedListInt, TypeNode.fromString("map<string, LinkedListNode<int>>"));
+    final ObjectNode mapStringLinkedListJsonActual = (ObjectNode) Serializer.toJson(
+        mapStringLinkedListInt, MAP_STRING_LINKED_LIST_INT);
     assertEquals(mapStringLinkedListIntJson, mapStringLinkedListJsonActual);
   }
 }

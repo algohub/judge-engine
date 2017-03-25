@@ -3,7 +3,9 @@ package org.algohub.engine.codegenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.algohub.engine.pojo.Function;
+import org.algohub.engine.type.IntermediateType;
 import org.algohub.engine.type.LanguageType;
+import org.algohub.engine.type.TypeNode;
 import org.algohub.engine.util.ObjectMapperInstance;
 
 /**
@@ -94,6 +96,33 @@ public final class PythonCodeGenerator {
   }
 
   /**
+   * Generate a type declaration.
+   *
+   * <p>post order, recursive.</p>
+   *
+   * @param type the type
+   * @return type declaration
+   */
+  static String generateTypeDeclaration(final TypeNode type) {
+    if (!type.isContainer()) {
+      return TypeMap.PYTHON_TYPE_MAP.get(type.getValue());
+    }
+
+    if (type.getValue() ==  IntermediateType.ARRAY || type.getValue() ==  IntermediateType.LIST) {
+      return generateTypeDeclaration(type.getElementType().get()) + "[]";
+    } else {
+      final String containerTypeStr = TypeMap.PYTHON_TYPE_MAP.get(type.getValue());
+      if (type.getKeyType().isPresent()) {
+        return containerTypeStr + "<" + generateTypeDeclaration(type.getKeyType().get())
+            + ", " + generateTypeDeclaration(type.getElementType().get())
+            + ">";
+      } else {
+        return containerTypeStr + "<" + generateTypeDeclaration(type.getElementType().get()) + ">";
+      }
+    }
+  }
+
+  /**
    * Generate an empty function with comments.
    * @param function Function prototype
    * @return source code of a empty function
@@ -104,14 +133,13 @@ public final class PythonCodeGenerator {
     // function comment
     for (final Function.Parameter p : function.getParameters()) {
       Indentation.append(result,
-          "# @param {" + FunctionGenerator.generateTypeDeclaration(p.getType(), LanguageType.PYTHON)
+          "# @param {" + generateTypeDeclaration(p.getType())
               + "} " + p.getName() + " " + p.getComment() + "\n", indent);
     }
 
     final Function.Return return_ = function.getReturn_();
-    Indentation.append(result, "# @return {" + FunctionGenerator
-        .generateTypeDeclaration(return_.getType(), LanguageType.PYTHON) + "} " + return_
-        .getComment() + "\n", indent);
+    Indentation.append(result, "# @return {" +
+        generateTypeDeclaration(return_.getType()) + "} " + return_.getComment() + "\n", indent);
 
     // function body
     Indentation.append(result, "def " + function.getName() + "(", indent);
