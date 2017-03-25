@@ -68,6 +68,7 @@ The judge engine has a pre-defined python module named `algohub`, which is need 
 Copy the Python `algohub` module  into one of Python's default module paths, i.e., `sys.path`
 
     python3 -c "import sys;print(sys.path);"
+    cd judge-engine-languages-support/
     sudo cp -r judge-engine-python-support/algohub/ /usr/local/lib/python3.5/dist-packages/
 
 
@@ -77,7 +78,8 @@ The judge engine also has a pre-defined ruby module named `algohub`, which is ne
 
 Copy the Ruby  `algohub` module into one of Ruby's default module search path(run `ruby -e 'puts $:'` to get all paths)
 
-    sudo cp src/main/resources/ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
+    cd judge-engine-languages-support/
+    sudo cp ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
 
 
 

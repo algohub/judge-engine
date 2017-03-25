@@ -43,12 +43,14 @@ public final class RubyCodeGenerator {
     }
 
     if(fromFile) {
-      Indentation.append(result, "raw_testcases = JSON.parse(IO.read(\"testcases.json\"))\n\n", 1);
+      Indentation.append(result, "raw_testcases = JSON.load(IO.read(\"testcases.json\"))\n\n", 1);
     } else {
-      Indentation.append(result, "raw_testcases = JSON.parse(STDIN.gets())\n\n", 1);
+      Indentation.append(result, "raw_testcases = JSON.load(STDIN.gets())\n\n", 1);
     }
 
-    Indentation.append(result, "(0..raw_testcases.size()-1).each do |i|\n", 1);
+    Indentation.append(result, "judge_result = Algohub::JudgeResult.new(Algohub::StatusCode::ACCEPTED)\n\n", 1);
+
+    Indentation.append(result, "raw_testcases.size.times do |i|\n", 1);
     Indentation.append(result, "test_case = raw_testcases[i]\n", 2);
     for (int i = 0; i < parameters.length; ++i) {
       final Function.Parameter parameter = parameters[i];
@@ -69,15 +71,24 @@ public final class RubyCodeGenerator {
     }
     result.append(")\n\n");
 
-    Indentation.append(result, "if actual_output != expected_output\n", 2);
-    Indentation.append(result,
-        "print(Algohub::JudgeResult.new(Algohub::StatusCode::WRONG_ANSWER).to_json())\n", 3);
-    Indentation.append(result, "exit 0\n", 3);
+    Indentation.append(result, "if actual_output == expected_output\n", 2);
+    Indentation.append(result, "judge_result.testcase_passed_count += 1\n", 3);
+    Indentation.append(result, "else\n", 2);
+    Indentation.append(result, "judge_result.input = test_case['input']\n", 3);
+    Indentation.append(result, "judge_result.expected_output = test_case['output']\n", 3);
+    Indentation.append(result, "judge_result.output = Algohub.to_json(result, output_type)\n", 3);
+    Indentation.append(result, "break\n", 3);
     Indentation.append(result, "end\n", 2);
     Indentation.append(result, "end\n\n", 1);
 
     Indentation.append(result,
-        "print(Algohub::JudgeResult.new(Algohub::StatusCode::ACCEPTED).to_json())\n", 1);
+        "if(judge_result.testcase_passed_count < raw_testcases.size)\n", 1);
+    Indentation.append(result, "judge_result.status_code = Algohub::StatusCode::WRONG_ANSWER\n", 2);
+    Indentation.append(result, "else\n", 1);
+    Indentation.append(result, "judge_result.status_code = Algohub::StatusCode::ACCEPTED\n", 2);
+    Indentation.append(result, "end\n\n", 1);
+
+    Indentation.append(result, "print(judge_result)\n", 1);
     result.append("end\n");
     return result.toString();
   }

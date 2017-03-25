@@ -51,6 +51,8 @@ public final class PythonCodeGenerator {
     }
     Indentation.append(result, "assert isinstance(raw_testcases, list)\n\n", 1);
 
+    Indentation.append(result, "judge_result = JudgeResult(StatusCode.ACCEPTED)\n\n", 1);
+
     Indentation.append(result, "for i in range(len(raw_testcases)):\n", 1);
     Indentation.append(result, "test_case = raw_testcases[i]\n", 2);
     for (int i = 0; i < parameters.length; ++i) {
@@ -73,12 +75,21 @@ public final class PythonCodeGenerator {
     }
     result.append(")\n\n");
 
-    Indentation.append(result, "if actual_output != expected_output:\n", 2);
-    Indentation.append(result, "print(JudgeResult(StatusCode.WRONG_ANSWER).to_json())\n", 3);
-    Indentation.append(result, "exit(0)\n\n", 3);
+    Indentation.append(result, "if actual_output == expected_output:\n", 2);
+    Indentation.append(result, "judge_result.testcase_passed_count += 1\n", 3);
+    Indentation.append(result, "else:\n", 2);
+    Indentation.append(result, "judge_result.input = test_case['input']\n", 3);
+    Indentation.append(result, "judge_result.expected_output = test_case['output']\n", 3);
+    Indentation.append(result, "judge_result.output = to_json(result, output_type);\n", 3);
+    Indentation.append(result, "break\n\n", 3);
 
+    Indentation.append(result,
+        "if judge_result.testcase_passed_count < len(raw_testcases):\n", 1);
+    Indentation.append(result, "judge_result.status_code = StatusCode.WRONG_ANSWER\n", 2);
+    Indentation.append(result, "else:\n", 1);
+    Indentation.append(result, "judge_result.status_code = StatusCode.ACCEPTED\n\n", 2);
 
-    Indentation.append(result, "print(JudgeResult(StatusCode.ACCEPTED).to_json())\n", 1);
+    Indentation.append(result, "print(judge_result)\n", 1);
     return result.toString();
   }
 
