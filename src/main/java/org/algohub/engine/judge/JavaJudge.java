@@ -45,7 +45,7 @@ public class JavaJudge implements JudgeInterface {
         final long time = System.currentTimeMillis() - start;
         return new JudgeResult(StatusCode.WRONG_ANSWER, null,
             testCasesJson[i].getInput(), oneResult.wrongOutput,
-            testCasesJson[i].getOutput(), i + 1,
+            testCasesJson[i].getOutput(), i,
             testCases.length, time, 0L);
       }
     }
