@@ -54,9 +54,13 @@ import java.util.Set;
     JsonNode cur = arrayNode;
     TypeNode node = typeNode;
     while (node.getValue() == IntermediateType.ARRAY) {
-      assert cur.isArray();
-      list.add(cur.size());
-      cur = cur.get(0);
+      if (cur != null) {
+        assert cur.isArray();
+        list.add(cur.size());
+        cur = cur.get(0);
+      } else {
+        list.add(0);
+      }
       node = node.getElementType().get();
     }
     return Ints.toArray(list);
