@@ -27,16 +27,20 @@ public class CppJudge implements JudgeInterface {
     final StringBuilder sb = new StringBuilder();
     final String[] lines = errorMessage.split("\n");
     final String CPP_SOLUTION_FILE = "solution." + LanguageType.CPLUSPLUS.getFileSuffix();
-    final Pattern pattern = Pattern.compile("solution\\.cpp:(\\d+):\\d+:");
+    final Pattern pattern = Pattern.compile("^solution\\.cpp:(\\d+):\\d+:");
 
-    for(int i = 0; i < lines.length; i+=4) {
-      if(lines[i].startsWith("In file included from main.cpp:") && lines[i+1].startsWith(CPP_SOLUTION_FILE)) {
-        sb.append("Line " + lines[i+1].substring(CPP_SOLUTION_FILE.length() + 1)).append('\n');
+    for(int i = 0; i < lines.length; i++) {
+      Matcher matcher = pattern.matcher(lines[i]);
+      if(matcher.find()) {
+        String lineNo = matcher.group(1);
+        sb.append("Line " + lines[i].substring(CPP_SOLUTION_FILE.length() + 1)).append('\n');
+        sb.append(lines[i+1]).append('\n');
         sb.append(lines[i+2]).append('\n');
-        sb.append(lines[i+3]).append('\n');
+        i += 2;
       } else if(lines[i].startsWith("main.cpp: In function") && lines[i+1].contains("was not declared in this scope") ) {
         int pos = lines[i+1].indexOf("error:");
         sb.append(lines[i+1].substring(pos)).append('\n');
+        i+= 1;
       }
     }
     return sb.toString();
