@@ -78,7 +78,7 @@ public final class RubyCodeGenerator {
     Indentation.append(result, "else\n", 2);
     Indentation.append(result, "judge_result.input = test_case['input']\n", 3);
     Indentation.append(result, "judge_result.expected_output = test_case['output']\n", 3);
-    Indentation.append(result, "judge_result.output = Algohub.to_json(result, output_type)\n", 3);
+    Indentation.append(result, "judge_result.output = Algohub.to_json(actual_output, output_type)\n", 3);
     Indentation.append(result, "break\n", 3);
     Indentation.append(result, "end\n", 2);
     Indentation.append(result, "end\n\n", 1);
