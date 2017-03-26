@@ -254,6 +254,7 @@ public interface JudgeInterface {
       } else {
         result = JudgeInterface.runCode(runCommand, testcasesText, tmpDir);
       }
+      result.setTestcaseTotalCount(testCases.length);
       result.setErrorMessage(createFriendlyMessage.apply(result.getErrorMessage()));
       return result;
     } catch (IOException | InterruptedException ex) {

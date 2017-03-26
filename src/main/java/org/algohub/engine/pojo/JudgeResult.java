@@ -3,6 +3,8 @@ package org.algohub.engine.pojo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.algohub.engine.bo.StatusCode;
 
 
@@ -11,11 +13,11 @@ import org.algohub.engine.bo.StatusCode;
  */
 @SuppressWarnings("PMD.CommentRequired")
 public final class JudgeResult {
-  @JsonProperty("status_code") private StatusCode statusCode;
+  @JsonProperty(value = "status_code", required = true) private StatusCode statusCode;
   @JsonProperty("error_message") private String errorMessage;
-  private String input;
-  private String output;
-  @JsonProperty("expected_output") private String expectedOutput;
+  private ArrayNode input;
+  private JsonNode output;
+  @JsonProperty("expected_output") private JsonNode expectedOutput;
   @JsonProperty("testcase_passed_count") private int testcasePassedCount;
   @JsonProperty("testcase_total_count") private int testcaseTotalCount;
   @JsonProperty("elapsed_time") private long elapsedTime; // milliseconds
@@ -24,10 +26,10 @@ public final class JudgeResult {
   /**
    * Since some fields are immutable, need to provide a method for Jackson.
    */
-  @JsonCreator public JudgeResult(@JsonProperty("status_code") final StatusCode statusCode,
+  @JsonCreator public JudgeResult(@JsonProperty(value = "status_code", required = true) final StatusCode statusCode,
       @JsonProperty("error_message") final String errorMessage,
-      @JsonProperty("input") final String input, @JsonProperty("output") final String output,
-      @JsonProperty("expected_output") final String expectedOutput,
+      @JsonProperty("input") final ArrayNode input, @JsonProperty("output") final JsonNode output,
+      @JsonProperty("expected_output") final JsonNode expectedOutput,
       @JsonProperty("testcase_passed_count") final int testcasePassedCount,
       @JsonProperty("testcase_total_count") final int testcaseTotalCount,
       @JsonProperty("elapsed_time") final long elapsedTime,
@@ -68,15 +70,15 @@ public final class JudgeResult {
     this.errorMessage = errorMessage;
   }
 
-  public String getInput() {
+  public ArrayNode getInput() {
     return input;
   }
 
-  public String getOutput() {
+  public JsonNode getOutput() {
     return output;
   }
 
-  public String getExpectedOutput() {
+  public JsonNode getExpectedOutput() {
     return expectedOutput;
   }
 
@@ -86,6 +88,10 @@ public final class JudgeResult {
 
   public int getTestcaseTotalCount() {
     return testcaseTotalCount;
+  }
+
+  public void setTestcaseTotalCount(int n) {
+    this.testcaseTotalCount = n;
   }
 
   public long getElapsedTime() {

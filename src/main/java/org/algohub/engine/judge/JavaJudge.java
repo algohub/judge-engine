@@ -1,5 +1,6 @@
 package org.algohub.engine.judge;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.algohub.engine.bo.InternalTestCase;
 import org.algohub.engine.compiler.java.CompileErrorException;
 import org.algohub.engine.compiler.java.MemoryJavaCompiler;
@@ -43,13 +44,14 @@ public class JavaJudge implements JudgeInterface {
       if (!oneResult.correct) {
         final long time = System.currentTimeMillis() - start;
         return new JudgeResult(StatusCode.WRONG_ANSWER, null,
-            testCasesJson[i].getInput().toString(), oneResult.wrongOutput,
-            testCasesJson[i].getOutput().toString(), i + 1, testCases.length, time, 0L);
+            testCasesJson[i].getInput(), oneResult.wrongOutput,
+            testCasesJson[i].getOutput(), i + 1,
+            testCases.length, time, 0L);
       }
     }
     final long time = System.currentTimeMillis() - start;
-    return new JudgeResult(StatusCode.ACCEPTED, null, null, null, null, testCases.length,
-        testCases.length, time, 0);
+    return new JudgeResult(StatusCode.ACCEPTED, null, null, null,
+        null, testCases.length, testCases.length, time, 0);
   }
 
   private static JudgeOneCaseResult judge(final Object clazz, final Method method,
@@ -64,7 +66,7 @@ public class JavaJudge implements JudgeInterface {
     if (Equals.equal(testCase.getOutput(), output)) {
       result.correct = true;
     } else {
-      result.wrongOutput = Serializer.toJson(output, returnType).toString();
+      result.wrongOutput = Serializer.toJson(output, returnType);
     }
     return result;
   }
@@ -153,6 +155,6 @@ public class JavaJudge implements JudgeInterface {
 
   private static class JudgeOneCaseResult {
     boolean correct;
-    String wrongOutput;
+    JsonNode wrongOutput;
   }
 }
