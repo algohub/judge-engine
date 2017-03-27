@@ -1,7 +1,7 @@
 # return a array, [index1, index2]
 def twoSum(numbers, target)
   # brute_force(numbers, target)
-  hash_table(numbers, target)
+  hash_table(numbers, target).sort
 end
 
 def brute_force(numbers, target)
