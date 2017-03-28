@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import java.util.Map;
+import org.algohub.engine.type.LanguageType;
 
 
 /**
@@ -28,7 +29,6 @@ public class Problem {
   @JsonProperty("related_problems") private final String[] relatedProblems;
   private final Map<String, String> author;
   @JsonProperty("test_cases_generator") private final String testCasesGenerator;
-  private final Code solution;
 
   /**
    * Since some fields are immutable, need to provide a method for Jackson.
@@ -46,8 +46,7 @@ public class Problem {
       @JsonProperty("memory_limit") final int memoryLimit,
       @JsonProperty("related_problems") final String[] relatedProblems,
       @JsonProperty("author") final Map<String, String> author,
-      @JsonProperty("test_cases_generator") final String testCasesGenerator,
-      @JsonProperty("solution") final Code solution) {
+      @JsonProperty("test_cases_generator") final String testCasesGenerator) {
     this.title = title;
     this.description = description;
     this.category = category;
@@ -60,7 +59,6 @@ public class Problem {
     this.author = author;
     this.testCases = testCases;
     this.testCasesGenerator = testCasesGenerator;
-    this.solution = solution;
   }
 
   /**
@@ -136,9 +134,5 @@ public class Problem {
 
   public String getTestCasesGenerator() {
     return testCasesGenerator;
-  }
-
-  public Code getSolution() {
-    return solution;
   }
 }
