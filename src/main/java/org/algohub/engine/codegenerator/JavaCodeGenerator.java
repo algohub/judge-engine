@@ -72,7 +72,7 @@ public final class JavaCodeGenerator {
    * @param function Function prototype
    * @return source code of a empty function
    */
-  static String generateEmptyFunction(final Function function) {
+  public static String generateEmptyFunction(final Function function) {
     return "public class Solution {\n"
         + FunctionGenerator.generateFunction(function, LanguageType.JAVA, 1) + "}\n";
   }

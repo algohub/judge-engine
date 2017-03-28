@@ -14,14 +14,14 @@ public class PythonCodeGeneratorTest {
         + "# @param {int} target target = numbers[index1] + numbers[index2]\n"
         + "# @return {int[]} [index1 + 1, index2 + 1] (index1 < index2)\n"
         + "def twoSum(numbers, target):\n    # Write your code here\n";
-    final String twoSumGenerated = PythonCodeGenerator.generateEmptyFunction(TWO_SUM, 0);
+    final String twoSumGenerated = PythonCodeGenerator.generateEmptyFunction(TWO_SUM);
     assertEquals(twoSumExpected, twoSumGenerated);
 
     final String wordLadderExpected = "# @param {str} begin_word the begin word\n"
         + "# @param {str} end_word the end word\n"
         + "# @param {set<str>} dict the dictionary\n" + "# @return {int} The shortest length\n"
         + "def ladderLength(begin_word, end_word, dict):\n    # Write your code here\n";
-    final String wordLadderGenerated = PythonCodeGenerator.generateEmptyFunction(WORD_LADDER, 0);
+    final String wordLadderGenerated = PythonCodeGenerator.generateEmptyFunction(WORD_LADDER);
     assertEquals(wordLadderExpected, wordLadderGenerated);
   }
 

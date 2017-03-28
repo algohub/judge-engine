@@ -127,7 +127,11 @@ public final class PythonCodeGenerator {
    * @param function Function prototype
    * @return source code of a empty function
    */
-  public static String generateEmptyFunction(final Function function, final int indent) {
+  public static String generateEmptyFunction(final Function function) {
+    return generateEmptyFunction(function, 0);
+  }
+
+  static String generateEmptyFunction(final Function function, final int indent) {
     final StringBuilder result = new StringBuilder();
 
     // function comment
