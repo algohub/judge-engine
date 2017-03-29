@@ -82,4 +82,7 @@ Copy the Ruby  `algohub` module into one of Ruby's default module search path(ru
     sudo cp ruby/algohub.rb /usr/local/lib/site_ruby/2.3.0/
 
 
+## Acknowledgments
+
+Special thanks to [@rednaxelafx](https://github.com/rednaxelafx), who is a compiler expert and gave me a lot of vital technical suggestions, this project would not have been possible without his help.
 
