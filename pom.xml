@@ -7,7 +7,7 @@
 
     <groupId>org.algohub.engine</groupId>
     <artifactId>judge-engine</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Judge Engine</name>
@@ -18,18 +18,18 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <guava.version>21.0</guava.version>
-        <jackson.version>2.9.0.pr1</jackson.version>
-        <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
+        <guava.version>23.4-jre</guava.version>
+        <jackson.version>2.9.2</jackson.version>
+        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
         <junit.version>4.12</junit.version>
-        <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
+        <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
         <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
         <maven.checkstyle.plugin.version>2.17</maven.checkstyle.plugin.version>
-        <checkstyle.version>7.6</checkstyle.version>
+        <checkstyle.version>8.4</checkstyle.version>
         <maven.jxr.plugin.version>2.5</maven.jxr.plugin.version>
-        <maven.pmd.plugin.version>3.7</maven.pmd.plugin.version>
-        <maven.findbugs.plugin.version>3.0.4</maven.findbugs.plugin.version>
+        <maven.pmd.plugin.version>3.8</maven.pmd.plugin.version>
+        <maven.findbugs.plugin.version>3.0.5</maven.findbugs.plugin.version>
     </properties>
     <dependencies>
         <dependency>
