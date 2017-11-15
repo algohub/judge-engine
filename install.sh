@@ -1,4 +1,12 @@
 #!/bin/bash
+
+command -v javac >/dev/null 2>&1 || { echo "JDK is no installed, now installing..."; sudo apt -qy install openjdk-8-jdk; }
+command -v g++ >/dev/null 2>&1 || { echo "g++ is no installed, now installing..."; sudo apt -qy install build-essential; }
+command -v python3 >/dev/null 2>&1 || { echo "Python3 is no installed, now installing..."; sudo apt -qy install python3; }
+command -v ruby >/dev/null 2>&1 || { echo "Ruby is no installed, now installing..."; sudo apt -qy install ruby; }
+
+git config --global http.sslVerify false
+
 if [[ ! -d "/usr/local/include/rapidjson" ]]; then
   git clone https://github.com/miloyip/rapidjson.git
   sudo cp -r rapidjson/include/rapidjson/ /usr/local/include/
@@ -6,6 +14,10 @@ if [[ ! -d "/usr/local/include/rapidjson" ]]; then
 fi
 
 git clone https://github.com/algohub/judge-engine-languages-support.git /tmp/judge-engine-languages-support
+
+if [[ ! -d "/usr/local/include/algohub/" ]]; then
+  sudo cp -r /tmp/judge-engine-languages-support/judge-engine-cpp-support/include/algohub/ /usr/local/include/
+fi
 
 if [[ ! -d "/usr/local/lib/python3.5/dist-packages/algohub/" ]]; then
   sudo cp -r /tmp/judge-engine-languages-support/judge-engine-python-support/algohub/ /usr/local/lib/python3.5/dist-packages/

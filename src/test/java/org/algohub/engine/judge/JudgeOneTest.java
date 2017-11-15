@@ -13,9 +13,10 @@ import org.junit.Test;
 // for debug only
 public class JudgeOneTest {
 
+  // only for debug
   @Test
   public void judgeOne() {
-    judgeOne("partition-list", LanguageType.JAVA);
+    // judgeOne("partition-list", LanguageType.JAVA);
   }
 
   private static void judgeOne(final String problemId, LanguageType languageType) {
